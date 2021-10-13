@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% import 'bootstrap/utils.html' as utils %}
+
+{% block app_content %}
+<h2>  </h2>
+    
+<br>
+<div class="container">
+	<div class="well well-sm">
+		<h4>
+		Part 1
+
+			Instructions:
+		</h4>
+
+	</div>
+
+	<div class="panel panel-default ">
+		<div class="panel-heading">
+		  <h3 class="panel-title">Evaluation</h3>
+		</div>
+		<div class="panel-body">
+			<div class="panel-body container-sm table-responsive">
+				<h4> Health Condition Evolution Annotation</h4>
+				{% if concepts %}
+					<table id="table_details" class="table table-hover table-sm table-bordered display compact">
+						<thead>
+							<tr>
+								<th>Health Condition Description</th>
+								<th>Annotation</th>
+								<th>Health Condition name</th>
+								<th>Identifier</th>
+<!--								<th>Sentence</th>-->
+								<th>Source</th>
+
+							</tr>
+						</thead>
+							<tr>
+								{% if concepts['conditionName'][0] %}
+								   <td> {{ concepts['conditionName'][0] }} </td>
+								{% else %}
+									<td> </td>
+								{% endif %}
+								{% if concepts['predictedTag'][0] %}
+								   <td> {{ concepts['predictedTag'][0] }}</td>
+								{% else %}
+									<td> </td>
+								{% endif %}
+								{% if concepts['snomedConcept'][0] %}
+								   <td> {{ concepts['snomedConcept'][0] }}</td>
+								{% else %}
+									<td> </td>
+								{% endif %}
+								{% if concepts['snomedIdentifier'][0] %}
+								   <td> {{ concepts['snomedIdentifier'][0] }}</td>
+								{% else %}
+									<td> </td>
+								{% endif %}
+								{% if concepts['source'][0] %}
+								   <td> {{ concepts['source'][0] }}</td>
+								{% else %}
+									<td> </td>
+								{% endif %}
+								</tr>
+					</table>
+
+				{% else %}
+					<br><strong> No health condition to validate  </strong>
+				{% endif %}
+
+
+			</div>
+
+			<div  id="main_answer" class="panel-body container-sm table-responsive">
+				<h4>How much do you agree with the following?</h4>
+				<h5>The annotation is:</h5>
+				<form class="navbar-form navbar-left" role="navigate" method="post" aria-label="Right Align">
+					<input type="hidden" id="snmdIdentifier" name="patient" value={{concepts['snomedIdentifier'][0]}}>
+
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioCorrect" value="option1">
+						<label class="form-check-label" for="inlineRadioCorrect">Correct</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"><!--  data-bs-toggle="collapse" data-bs-target="#collapseImprove" aria-expanded="false" aria-controls="collapseImprove">!-->
+						<label class="form-check-label" for="inlineRadio2">Partially correct</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3" >
+						<label class="form-check-label" for="inlineRadio3">Partially incorrect</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4" >
+						<label class="form-check-label" for="inlineRadio4">Incorrect</label>
+					</div>
+
+					<div>
+						<div  id="editCES" class="panel-body container-sm table-responsive">
+							<div class="collapse multi-collapse" id="collapseImprove">
+<!--							<div class="panel-body container-sm table-responsive" style="display:none" id="improveButton">-->
+								<h4> Can you improve the annotation?</h4>
+								<button type="button" class="btn btn-primary btn-lg" value="Y" id="buttonYes">Yes</button>
+								<button type="button" class="btn btn-primary btn-lg" value="N" id="buttonNo">No</button>
+							</div>
+
+							<p></p>
+							<div class="row justify-content-end">
+								<div class="collapse multi-collapse" id="collapseNext">
+									<button type="submit" class="btn btn-primary btn-lg" value="next" name="next" id="buttonNext">Next</button>
+								</div>
+							</div>
+
+							<p></p>
+
+							<div class="collapse multi-collapse" id="collapseEditCES">
+								<div class="accordion" id="accordionPanelsStayOpen">
+									<div class="accordion-item" id="editCommands">
+										<h2 class="accordion-header" id="panelsStayOpen-headingOne">
+											<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+											Edit Condition Evolution Statement
+											</button>
+										</h2>
+										<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+											<div class="accordion-body">
+												<div  id="cesAnnotation" class="panel-body container-sm table-responsive">
+													<div class="row">
+														<div class="col-2">
+															Direction
+														</div>
+														<div class="col">
+															Pace
+														</div>
+														<div class="col">
+															Time range
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col">
+															CES annotation
+														</div>
+														<div class="col">
+															<select class="form-select" aria-label="Default select example" id="direction">
+															  <option value="1" selected>IMPROVE</option>
+															  <option value="2">DECLINE</option>
+															  <option value="3">PERMANENT</option>
+																<option value="4">NONE</option>
+															</select>
+														</div>
+														<div class="col">
+															<select class="form-select" aria-label="Default select example" id="pace">
+															  <option value="1" selected>SLOWLY</option>
+															  <option value="2">MODERATELY</option>
+															  <option value="3">FAST</option>
+															</select>
+														</div>
+														<div class="col">
+															From:
+														</div>
+														<div class="col">
+															<select class="form-select" aria-label="Default select example" id="from-lb">
+															  <option value="1" selected>SLOWLY</option>
+															  <option value="2">MODERATELY</option>
+															  <option value="3">FAST</option>
+															</select>
+														</div>
+														<div class="col">
+															<select class="form-select" aria-label="Default select example" id="from-ub">
+															  <option value="1" selected>MINUTES</option>
+															  <option value="2">DAYS</option>
+															  <option value="3">WEEKS</option>
+																<option value="4">MONTHS</option>
+																<option value="5">YEARS</option>
+															</select>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col">
+														</div>
+														<div class="col">
+														</div>
+														<div class="col">
+														</div>
+														<div class="col">
+															To:
+														</div>
+														<div class="col">
+															<select class="form-select" aria-label="Default select example" id="to-lb">
+															  <option value="1" selected>SLOWLY</option>
+															  <option value="2">MODERATELY</option>
+															  <option value="3">FAST</option>
+															</select>
+														</div>
+														<div class="col">
+															<select class="form-select" aria-label="Default select example" id="to-ub">
+															  <option value="1" selected>MINUTES</option>
+															  <option value="2">DAYS</option>
+															  <option value="3">WEEKS</option>
+																<option value="4">MONTHS</option>
+																<option value="5">YEARS</option>
+															</select>
+														</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+	var chk2 = document.getElementById("inlineRadio2");
+	var chk3 = document.getElementById("inlineRadio3");
+	var chk4 = document.getElementById("inlineRadio4");
+	var elementImproveCESQuestion = document.getElementById("collapseImprove");
+
+    var btnNo = document.getElementById("buttonNo");
+    var btnYes = document.getElementById("buttonYes");
+    var elementEditCES = document.getElementById("collapseEditCES");
+    var chkCorrect = document.getElementById("inlineRadioCorrect");
+    var elementNext = document.getElementById("collapseNext");
+
+	/* Create a collapse instance, but do not toggle
+    the collapse element on invocation */
+     var collapseEditCES = new bootstrap.Collapse(elementEditCES, {
+        toggle: false
+    });
+    var collapseNext = new bootstrap.Collapse(elementNext, {
+        toggle: false
+    });
+    var collapseImproveCESQuestion = new bootstrap.Collapse(elementImproveCESQuestion, {
+        toggle: false
+    });
+
+    chkCorrect.addEventListener("click", function(){
+        collapseNext.show();
+        collapseImproveCESQuestion.hide();
+        collapseEditCES.hide();
+    });
+
+    chk2.addEventListener("click", function(){
+        collapseImproveCESQuestion.show();
+        collapseNext.hide();
+        collapseEditCES.hide();
+    });
+
+    chk3.addEventListener("click", function(){
+        collapseImproveCESQuestion.show();
+        collapseNext.hide();
+        collapseEditCES.hide();
+    });
+
+    chk4.addEventListener("click", function(){
+        collapseImproveCESQuestion.show();
+        collapseNext.hide();
+        collapseEditCES.hide();
+    });
+
+    btnNo.addEventListener("click", function(){
+        collapseEditCES.hide();
+        collapseNext.show();
+    });
+
+    btnYes.addEventListener("click", function(){
+        collapseEditCES.show();
+        collapseNext.show();
+    });
+<!--    var myCollapseNext = new bootstrap.Collapse(elementNext, {-->
+<!--        toggle: false-->
+<!--    });-->
+
+<!--&lt;!&ndash;    btn.addEventListener("click", function(){&ndash;&gt;-->
+<!--&lt;!&ndash;        myCollapse.hide();&ndash;&gt;-->
+<!--&lt;!&ndash;    });&ndash;&gt;-->
+});
+
+<!--document.addEventListener("DOMContentLoaded", function(){-->
+
+<!--    var btn = document.getElementById("buttonYes");-->
+<!--    var element = document.getElementById("collapseEditCES");-->
+
+<!--    // Create a collapse instance, toggles the collapse element on invocation-->
+<!--    var myCollapse = new bootstrap.Collapse(element, {-->
+<!--        toggle: false-->
+<!--    });-->
+
+<!--    btn.addEventListener("click", function(){-->
+<!--        myCollapse.hide();-->
+<!--    });-->
+<!--});-->
+<!--document.addEventListener("DOMContentLoaded", function(){-->
+<!--    var btn = document.getElementById("inlineRadio1");-->
+<!--    var element = document.getElementById("collapseEditCES");-->
+
+<!--    // Create a collapse instance, toggles the collapse element on invocation-->
+<!--    var myCollapse = new bootstrap.Collapse(element, {-->
+<!--        toggle: false-->
+<!--    });-->
+
+<!--    btn.addEventListener("click", function(){-->
+<!--        myCollapse.hide();-->
+<!--    });-->
+<!--});-->
+</script>
+
+{% endblock %}
