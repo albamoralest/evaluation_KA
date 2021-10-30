@@ -7,312 +7,405 @@
     
 <br>
 <div class="container">
-	<div class="well well-sm">
-		<h4>
-		Part 1
-
-			Instructions:
-		</h4>
-
-	</div>
-
 	<div class="panel panel-default ">
 		<div class="panel-heading">
-		  <h3 class="panel-title">Evaluation</h3>
+		  <h3 class="panel-title"><b>Evaluation</b></h3>
 		</div>
 		<div class="panel-body">
-			<div class="panel-body container-sm table-responsive">
-				<h4> Health Condition Evolution Annotation</h4>
-				{% if concepts %}
-					<table id="table_details" class="table table-hover table-sm table-bordered display compact">
-						<thead>
-							<tr>
-								<th>Health Condition Description</th>
-								<th>Annotation</th>
-								<th>Health Condition name</th>
-								<th>Identifier</th>
-<!--								<th>Sentence</th>-->
-								<th>Source</th>
-
-							</tr>
-						</thead>
-							<tr>
-								{% if concepts['conditionName'][0] %}
-								   <td> {{ concepts['conditionName'][0] }} </td>
-								{% else %}
-									<td> </td>
+<!--			<h4><b> Illustrative case: </b></h4>-->
+			<div class="row">
+			  <div class="col-sm-6">
+				<div class="card h-100">
+				  <div class="card-body">
+					  <h4><b>Illustrative case:</b></h4>
+					<p class="card-text">
+						<h4>Anne works in a University. An emergency situation arises and our Intelligent System detects that Anne has a health condition
+						  known as: <b>{{ concepts[0]['conditionName'] }}</b>
+						</h4>
+					</p>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-sm-6">
+				<div class="card h-100" >
+					<div class="card-body">
+						<h4><b>Health conditions Details</b></h4>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item"><b>Health Condition Description: </b>
+								{% if concepts[0]['conditionName'] %}
+									{{ concepts[0]['conditionName'] }}
 								{% endif %}
-								{% if concepts['predictedTag'][0] %}
-								   <td> {{ concepts['predictedTag'][0] }}</td>
-								{% else %}
-									<td> </td>
+							</li>
+							<li class="list-group-item"><b> Health Condition name </b>
+								{% if concepts[0]['snomedConcept'] %}
+									{{ concepts[0]['snomedConcept'] }}
 								{% endif %}
-								{% if concepts['snomedConcept'][0] %}
-								   <td> {{ concepts['snomedConcept'][0] }}</td>
-								{% else %}
-									<td> </td>
-								{% endif %}
-								{% if concepts['snomedIdentifier'][0] %}
-								   <td> {{ concepts['snomedIdentifier'][0] }}</td>
-								{% else %}
-									<td> </td>
-								{% endif %}
-								{% if concepts['source'][0] %}
-								   <td> {{ concepts['source'][0] }}</td>
-								{% else %}
-									<td> </td>
-								{% endif %}
-								</tr>
-					</table>
-
-				{% else %}
-					<br><strong> No health condition to validate  </strong>
-				{% endif %}
-
-
+							</li>
+							  <li class="list-group-item"><b> Identifier </b>
+								  {% if concepts[0]['snomedIdentifier'] %}
+									{{ concepts[0]['snomedIdentifier'] }}
+								  {% endif %}
+							</li>
+						</ul>
+					</div>
+				</div>
+			  </div>
 			</div>
 
-			<div  id="main_answer" class="panel-body container-sm table-responsive">
-				<h4>How much do you agree with the following?</h4>
-				<h5>The annotation is:</h5>
-				<form class="navbar-form navbar-left" role="navigate" method="post" aria-label="Right Align">
-					<input type="hidden" id="snmdIdentifier" name="patient" value={{concepts['snomedIdentifier'][0]}}>
-
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadioCorrect" value="option1">
-						<label class="form-check-label" for="inlineRadioCorrect">Correct</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"><!--  data-bs-toggle="collapse" data-bs-target="#collapseImprove" aria-expanded="false" aria-controls="collapseImprove">!-->
-						<label class="form-check-label" for="inlineRadio2">Partially correct</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3" >
-						<label class="form-check-label" for="inlineRadio3">Partially incorrect</label>
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4" >
-						<label class="form-check-label" for="inlineRadio4">Incorrect</label>
-					</div>
-
-					<div>
-						<div  id="editCES" class="panel-body container-sm table-responsive">
-							<div class="collapse multi-collapse" id="collapseImprove">
-<!--							<div class="panel-body container-sm table-responsive" style="display:none" id="improveButton">-->
-								<h4> Can you improve the annotation?</h4>
-								<button type="button" class="btn btn-primary btn-lg" value="Y" id="buttonYes">Yes</button>
-								<button type="button" class="btn btn-primary btn-lg" value="N" id="buttonNo">No</button>
+<!--			<p><h4>Our system indicates this condition evolves as indicated in the following list.</h4></p>-->
+			<!-- Listing the CES and controls to indicate correctness-->
+			<form class="navbar-form navbar-left" role="navigate" method="post" aria-label="Right Align" id="editCESform">
+				<div class="panel-body container-sm table-responsive">
+					<p>
+						<h4>
+							<b>How do you agree with the Condition Evolution Statement for this health condition?</b>
+						</h4>
+					</p>
+					{% if concepts %}
+					<table id="table_details" class="table table-striped">
+						<thead>
+							<tr>
+								<th>Info </th>
+								<th>Condition Evolution Statement</th>
+								<th>Sentence</th>
+								<th>Incorrect</th>
+								<th>Partially incorrect</th>
+								<th>Neither correct nor incorrect</th>
+								<th>Partially correct</th>
+								<th>Correct</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for dataCell in concepts %}
+							<tr>
+								<td>
+									<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#healthDetailsModal">Source</button>
+								</td>
+								{% if dataCell['predictedTag'] %}
+								   <td> {{ dataCell['predictedTag'] }}</td>
+								{% else %}
+									<td> </td>
+								{% endif %}
+								{% if dataCell['sentence'] %}
+								   <td> {{ dataCell['sentence'] }}</td>
+								{% else %}
+									<td> </td>
+								{% endif %}
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioI" value="incorrect">
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioPI" value="pi" >
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioNCNI" value="ncni" >
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioPC" value="pc"><!--  data-bs-toggle="collapse" data-bs-target="#collapseImprove" aria-expanded="false" aria-controls="collapseImprove">!-->
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioCorrect" value="correct">
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					{% else %}
+						<br><strong> No health condition to validate  </strong>
+					{% endif %}
+				</div>
+				<!-- Vertically centered modal -->
+				<div id="healthDetailsModal" class="modal fade" tabindex="-1" aria-labelledby="healthDetailsTitle" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 id="healthDetailsTitle" class="modal-title">CES details</h5>
+								<button class="bth-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
+							<div class="modal-body">
+								<p>This is the content</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
 
-							<p></p>
-							<div class="row justify-content-end">
-								<div class="collapse multi-collapse" id="collapseNext">
-									<button type="submit" class="btn btn-primary btn-lg" value="next" name="next" id="buttonNext">Next</button>
+				<div  id="main_answer" class="panel-body container-sm table-responsive">
+<!--					<div  id="editCES" class="panel-body container-sm table-responsive">-->
+						<!-- Asking if possible to improve -->
+						<div class="row justify-content-end" id="editCES">
+							<div class="col-3 collapse multi-collapse" id="collapseImprove">
+								<h4> Can you improve the annotation?</h4>
+								<div>
+									<button type="button" class="btn btn-primary btn-lg" value="Y" id="buttonYes">Yes</button>
+									<button type="button" class="btn btn-primary btn-lg" value="N" id="buttonNo">No</button>
 								</div>
 							</div>
+						</div>
+						<p></p>
 
-							<p></p>
+						<!-- Controls to input a new value for CES-->
 
-							<div class="collapse multi-collapse" id="collapseEditCES">
-								<div class="accordion" id="accordionPanelsStayOpen">
-									<div class="accordion-item" id="editCommands">
-										<h2 class="accordion-header" id="panelsStayOpen-headingOne">
-											<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-											Edit Condition Evolution Statement
-											</button>
-										</h2>
-										<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-											<div class="accordion-body">
-												<div  id="cesAnnotation" class="panel-body container-sm table-responsive">
-													<div class="row">
-														<div class="col-2">
-															Direction
-														</div>
-														<div class="col">
-															Pace
-														</div>
-														<div class="col">
-															Time range
-														</div>
-													</div>
-
-													<div class="row">
-														<div class="col">
-															CES annotation
-														</div>
-														<div class="col">
-															<select class="form-select" aria-label="Default select example" id="direction">
-															  <option value="1" selected>IMPROVE</option>
-															  <option value="2">DECLINE</option>
-															  <option value="3">PERMANENT</option>
-																<option value="4">NONE</option>
-															</select>
-														</div>
-														<div class="col">
-															<select class="form-select" aria-label="Default select example" id="pace">
-															  <option value="1" selected>SLOWLY</option>
-															  <option value="2">MODERATELY</option>
-															  <option value="3">FAST</option>
-															</select>
-														</div>
-														<div class="col">
-															From:
-														</div>
-														<div class="col">
-															<select class="form-select" aria-label="Default select example" id="from-lb">
-															  <option value="1" selected>SLOWLY</option>
-															  <option value="2">MODERATELY</option>
-															  <option value="3">FAST</option>
-															</select>
-														</div>
-														<div class="col">
-															<select class="form-select" aria-label="Default select example" id="from-ub">
-															  <option value="1" selected>MINUTES</option>
-															  <option value="2">DAYS</option>
-															  <option value="3">WEEKS</option>
-																<option value="4">MONTHS</option>
-																<option value="5">YEARS</option>
-															</select>
-														</div>
-													</div>
-
-													<div class="row">
-														<div class="col">
-														</div>
-														<div class="col">
-														</div>
-														<div class="col">
-														</div>
-														<div class="col">
-															To:
-														</div>
-														<div class="col">
-															<select class="form-select" aria-label="Default select example" id="to-lb">
-															  <option value="1" selected>SLOWLY</option>
-															  <option value="2">MODERATELY</option>
-															  <option value="3">FAST</option>
-															</select>
-														</div>
-														<div class="col">
-															<select class="form-select" aria-label="Default select example" id="to-ub">
-															  <option value="1" selected>MINUTES</option>
-															  <option value="2">DAYS</option>
-															  <option value="3">WEEKS</option>
-																<option value="4">MONTHS</option>
-																<option value="5">YEARS</option>
-															</select>
-														</div>
-													</div>
-
-												</div>
+						<div class="collapse multi-collapse" id="collapseEditCES">
+							<div class="card">
+								<div class="card-header">
+									Edit Condition Evolution Statement
+								</div>
+								<div class="card-body">
+									<div class="row input-group input-group-lg">
+										<div class="col-md-2">
+											<label class="input-group-text input-group-lg" for="direction">Direction: </label>
+											<select class="form-select form-select-lg" id="direction" name="direction">
+												<option value="IMPROVE" selected>IMPROVE</option>
+												<option value="DECLINE">DECLINE</option>
+												<option value="PERMANENT">PERMANENT</option>
+												<option value="NONE">NONE</option>
+											</select>
+										</div>
+										<div class="col-md-2 p-1">
+											<label class="input-group-text" for="pace">Pace: </label>
+											<select class="form-select form-select-lg" aria-label="Default select example" id="pace" name="pace">
+											  <option value="SLOWLY" selected>SLOWLY</option>
+											  <option value="MODERATELY">MODERATELY</option>
+											  <option value="FAST">FAST</option>
+											</select>
+										</div>
+										<div class="col-md-4 p-1">
+											<label class="input-group-text" for="digitFrom0">From: </label>
+											<div class="col-md-3 p-0">
+												<select class="form-select form-select-lg" aria-label="Default select example" id="digitFrom0" name="digitFrom0">
+													<option value="0" selected>0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+											</div>
+											<div class="col-md-3 p-0">
+												<select class="form-select form-select-lg" aria-label="Default select example" id="digitFrom1" name="digitFrom1">
+													<option value="0" selected>0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+											</div>
+											<div class="col-md-6 p-0">
+												<select class="form-select form-select-lg" aria-label="Default select example" id="from-lb" name="from-lb">
+													<option value="MINUTES" selected>MINUTES</option>
+													<option value="DAYS">DAYS</option>
+													<option value="WEEKS">WEEKS</option>
+													<option value="MONTHS">MONTHS</option>
+													<option value="YEARS">YEARS</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-4 p-1">
+											<label class="input-group-text" for="digitTo0">To: </label>
+											<div class="col-md-3 p-0">
+												<select class="form-select form-select-lg" aria-label="Default select example" id="digitTo0" name="digitTo0">
+													<option value="0" selected>0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+											</div>
+											<div class="col-md-3 p-0">
+												<select class="form-select form-select-lg" aria-label="Default select example" id="digitTo1" name="digitTo1">
+													<option value="0" selected>0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+											</div>
+											<div class="col-md-6 p-0">
+												<select class="form-select form-select-lg" aria-label="Default select example" id="to-ub" name="to-ub">
+													<option value="MINUTE" selected>MINUTES</option>
+													<option value="DAY">DAYS</option>
+													<option value="WEEK">WEEKS</option>
+													<option value="MONTH">MONTHS</option>
+													<option value="YEAR">YEARS</option>
+												</select>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</form>
 
-			</div>
+					<!-- Collapse Next button to continue with annotations -->
+					<div id="NextButton" class="panel-body container-sm table-responsive">
+						<div class="row justify-content-end">
+							<div class="d-grid gap-2 col-3 collapse multi-collapse in" id="collapseNext">
+								<button type="submit" class="btn btn-primary btn-lg" value="next" name="next" id="buttonNext" disabled>Next</button>
+<!--								<button class="btn btn-primary btn-lg" value="next" name="next" id="buttonNext" disabled>Next</button>-->
+							</div>
+						</div>
+						<p></p>
+						<input type="hidden" id="totalCES" name="totalCES" value="{{ items }}">
+						<input type="hidden" id="errorValue" name="errorValue" value="">
+						<input type="hidden" id="improveAnswer" name="improveAnswer" value="">
+						<input type="hidden" id="snmdIdentifier" name="snmdIdentifier" value="{{ concepts[0]['snomedIdentifier'] }}">
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
+{% endblock %}
+{% block additional_scripts %}
+<script type="text/javascript">
 
-<script>
-document.addEventListener("DOMContentLoaded", function(){
-	var chk2 = document.getElementById("inlineRadio2");
-	var chk3 = document.getElementById("inlineRadio3");
-	var chk4 = document.getElementById("inlineRadio4");
-	var elementImproveCESQuestion = document.getElementById("collapseImprove");
+	$(document).ready(function(){
+		$(".form-check-input").click(function(){
+		//$("input:radio").click(function(){
+			//console.log('button click');//output the description to the console
+			// if all checked then value = True, if at least one is not checked then false
+			var check = validateAllRadiosCheck();
+			//console.log(check);
+			if(check){
+				//console.log("True");
+				// activate Next button
+				//$("#buttonNext").removeAttr("disabled");
+				//$('#buttonNext').removeClass('disabled');
+				// activate question to improve value
+				$('#collapseImprove').addClass('collapse multi-collapse in');
+			}
+		});
 
-    var btnNo = document.getElementById("buttonNo");
-    var btnYes = document.getElementById("buttonYes");
-    var elementEditCES = document.getElementById("collapseEditCES");
-    var chkCorrect = document.getElementById("inlineRadioCorrect");
-    var elementNext = document.getElementById("collapseNext");
+		$("#buttonNo").click(function(){
+			// enable the controls for Next
+			$("#buttonNext").removeAttr("disabled");
+			$('#buttonNext').removeClass('disabled');
+			$("#collapseEditCES").removeClass("collapse multi-collapse in");
+			$('#collapseEditCES').addClass('collapse multi-collapse');
+			$("#improveAnswer").removeAttr("value");
+			$("#improveAnswer").attr("value", "NO");
+		});
 
-	/* Create a collapse instance, but do not toggle
-    the collapse element on invocation */
-     var collapseEditCES = new bootstrap.Collapse(elementEditCES, {
-        toggle: false
-    });
-    var collapseNext = new bootstrap.Collapse(elementNext, {
-        toggle: false
-    });
-    var collapseImproveCESQuestion = new bootstrap.Collapse(elementImproveCESQuestion, {
-        toggle: false
-    });
+		$("#buttonYes").click(function(){
+			// enable the controls to input a new CES value
+			$("#buttonNext").removeAttr("disabled");
+			$('#buttonNext').removeClass('disabled');
+			$('#collapseEditCES').addClass('collapse multi-collapse in');
+			$("#improveAnswer").removeAttr("value");
+			$("#improveAnswer").attr("value", "YES");
+		});
 
-    chkCorrect.addEventListener("click", function(){
-        collapseNext.show();
-        collapseImproveCESQuestion.hide();
-        collapseEditCES.hide();
-    });
+		$("#buttonNext").click(function(){
+			// validate all radio input check
+			var check = validateAllRadiosCheck();
+			if(check){
+				$("#errorValue").removeAttr("value");
+				$("#errorValue").attr("value", "");
+				//$('#buttonNext').addClass('value');
+				//alert('One radio in each group is checked.');
+			}else{
+				$("#errorValue").removeAttr("value");
+				$("#errorValue").attr("value", "incompleteCheckBox");
+				//$('#buttonNext').addClass('value');
+				//alert('Please select one option in each question.');
+			}
 
-    chk2.addEventListener("click", function(){
-        collapseImproveCESQuestion.show();
-        collapseNext.hide();
-        collapseEditCES.hide();
-    });
+			// validate two digits are not zero at the same time
+			var valueSelected  = $("#improveAnswer").val();
+			if (valueSelected == "YES"){
+				var checkDigits = validateZeroDigits();
+			}
+		});
 
-    chk3.addEventListener("click", function(){
-        collapseImproveCESQuestion.show();
-        collapseNext.hide();
-        collapseEditCES.hide();
-    });
+		$('#direction').find('option').click(function () {
+			var optionSelected = $(this);
+			var valueSelected  = optionSelected.val();
+			var textSelected   = optionSelected.text();
 
-    chk4.addEventListener("click", function(){
-        collapseImproveCESQuestion.show();
-        collapseNext.hide();
-        collapseEditCES.hide();
-    });
+			if (textSelected == "NONE" || textSelected == "PERMANENT"){
+				// disable from controls
+				$("#pace").prop("disabled", true);
+				$("#digitFrom0").prop("disabled", true);
+				$("#digitFrom1").prop("disabled", true);
+				$("#from-lb").prop("disabled", true);
 
-    btnNo.addEventListener("click", function(){
-        collapseEditCES.hide();
-        collapseNext.show();
-    });
+				// disable from controls
+				$("#digitTo0").prop("disabled", true);
+				$("#digitTo1").prop("disabled", true);
+				$("#to-ub").prop("disabled", true);
+			}else{
+				// enable controls
+				$("#pace").prop("disabled", false);
+				$("#digitFrom0").prop("disabled", false);
+				$("#digitFrom1").prop("disabled", false);
+				$("#from-lb").prop("disabled", false);
 
-    btnYes.addEventListener("click", function(){
-        collapseEditCES.show();
-        collapseNext.show();
-    });
-<!--    var myCollapseNext = new bootstrap.Collapse(elementNext, {-->
-<!--        toggle: false-->
-<!--    });-->
+				// disable from controls
+				$("#digitTo0").prop("disabled", false);
+				$("#digitTo1").prop("disabled", false);
+				$("#to-ub").prop("disabled", false);
+			}
+		});
 
-<!--&lt;!&ndash;    btn.addEventListener("click", function(){&ndash;&gt;-->
-<!--&lt;!&ndash;        myCollapse.hide();&ndash;&gt;-->
-<!--&lt;!&ndash;    });&ndash;&gt;-->
-});
+		// validate all radio button groups have one checked
+		function validateAllRadiosCheck() {
+			var check = true;
+			$("input:radio").each(function(){
+				var name = $(this).attr("name");
+				// if one radio button is not checked then return false
+				if($("input:radio[name="+name+"]:checked").length == 0){
+					check = false;
+				}
+			});
+			return check;
+		};
 
-<!--document.addEventListener("DOMContentLoaded", function(){-->
+		// validate two digits are not zero at the same time
+		function validateZeroDigits() {
+			var check = true;
+			var digitFrom0 = $("#digitFrom0").val();
+			var digitFrom1 = $("#digitFrom1").val();
 
-<!--    var btn = document.getElementById("buttonYes");-->
-<!--    var element = document.getElementById("collapseEditCES");-->
+			var digitTo0 = $("#digitTo0").val();
+			var digitTo1 = $("#digitTo1").val();
 
-<!--    // Create a collapse instance, toggles the collapse element on invocation-->
-<!--    var myCollapse = new bootstrap.Collapse(element, {-->
-<!--        toggle: false-->
-<!--    });-->
+			var direction = $("#direction").val();
 
-<!--    btn.addEventListener("click", function(){-->
-<!--        myCollapse.hide();-->
-<!--    });-->
-<!--});-->
-<!--document.addEventListener("DOMContentLoaded", function(){-->
-<!--    var btn = document.getElementById("inlineRadio1");-->
-<!--    var element = document.getElementById("collapseEditCES");-->
+			if (direction != "PERMANENT" && direction != "NONE"){
+				if (digitFrom0 == "0" && digitFrom1 == "0"){
+					check = false
+					$("#errorValue").removeAttr("value");
+					$("#errorValue").attr("value", "digitFromInvalid");
+				}else if (digitTo0 == "0" && digitTo1 == "0"){
+					check = false
+					$("#errorValue").removeAttr("value");
+					$("#errorValue").attr("value", "digitToInvalid");
+				}
+			}
+			return check;
+		};
 
-<!--    // Create a collapse instance, toggles the collapse element on invocation-->
-<!--    var myCollapse = new bootstrap.Collapse(element, {-->
-<!--        toggle: false-->
-<!--    });-->
-
-<!--    btn.addEventListener("click", function(){-->
-<!--        myCollapse.hide();-->
-<!--    });-->
-<!--});-->
+	});
 </script>
-
 {% endblock %}

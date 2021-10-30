@@ -11,15 +11,16 @@ import pandas as pd
 
 # import random
 from fileinput import filename
-# import csv, shutil, time
+import csv, shutil, time
 from csv import writer
+
+
 class DtMngmnt():
     resultsDirectory = 0
     resourcesDirectory = 0
     '''
     classdocs
     '''
-
 
     def __repr__(self):
         # self.totalResult = self.getTotalExamples()
@@ -100,9 +101,20 @@ class DtMngmnt():
             #     reader = csv.reader(f)
             #     samplelist = list(reader)
             dfConcepts = pd.read_csv(localPath)
+            # returns a dataframe object
             return dfConcepts
         except Exception as e:
             print("EX: " + str(e))
+
+    def getOneCondition(self, snmdId, fileName):
+        # read doc
+        dfConcepts = self.readCSVFile(fileName)
+        dfConcepts['snomedIdentifier'] = dfConcepts['snomedIdentifier'].map(str)
+        querySentence = "snomedIdentifier=='{}'".format(snmdId)
+        # print(querySentence)
+        annotationRows = dfConcepts.query(querySentence)
+        annotationRows.sort_values(by=['confidence'], inplace=True, ascending=[False])
+        return annotationRows
 
     def getConceptsAnnotations(self, snmdId, fileName):
         # read doc
@@ -111,21 +123,53 @@ class DtMngmnt():
         # order by id
         dfConcepts.sort_values(by=['snomedIdentifier'], inplace=True, ascending=[True])
         # delete duplicates
-        dfNew = dfConcepts.drop_duplicates(subset=['snomedIdentifier'], keep="first", inplace=False)
+        dfNew = dfConcepts.drop_duplicates(subset=['snomedIdentifier'], keep="first", inplace=False,ignore_index=True)
 
         # if id == -1 then obtain the first id in the list
         if snmdId == -1:
             selectedId = dfNew.iloc[0]['snomedIdentifier']
             # print(selectedId)
         else:
-        # if id = XXX concept id, then obtain the next id in the list
-            index_list = dfNew.index[dfNew['snomedIdentifier']==snmdId].tolist()
-            selectedId = dfNew.iloc[index_list[0]]['snomedIdentifier']
+            # if id = XXX concept id, then obtain the next id in the list
+            # index_list = dfNew.index[dfNew['snomedIdentifier']==snmdId].tolist()
+            index_list = dfNew[dfNew['snomedIdentifier'] == snmdId].index[0]
+            print(index_list)
+            selectedId = dfNew['snomedIdentifier'].iloc[index_list+1]
 
         querySentence = "snomedIdentifier=='{}'".format(selectedId)
-        # print(querySentence)
         annotationsList = dfConcepts.query(querySentence)
+        # order by confidence
+        annotationsList.sort_values(by=['confidence'], inplace=True, ascending=[False])
         # print(len(annotationsList))
+        annotationsList['index'] = list(range(len(annotationsList)))
 
         return annotationsList
+
+    def createCSVresultsFilesP1(self,userID):
+        # 1. File one: Answers to all the CES annotations
+        fileNameOne = str(userID)+"partOneAnswersA"
+        fieldNamePartOne = ['snomedConcept', 'snomedIdentifier', 'conditionName', 'predictedTag', 'confidence',
+                            'sentence', 'source', 'support CNL1L2L3', 'support L1L2L3', 'L1', 'L2', 'L3']
+        with open(self.resultsDirectory + fileNameOne + '.csv', mode='w') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=fieldNamePartOne)
+            writer.writeheader()
+
+        # 2. File two: If given the new CES
+        fileNAmeTwo = str(userID)+"partOneAnswersB"
+        fieldNamePartTwo = ['username', 'snmdIdentifier', 'newCES']
+
+        with open(self.resultsDirectory+fileNAmeTwo+'.csv', mode='w') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=fieldNamePartTwo)
+            writer.writeheader()
+
+    def appendListToCSV(self, userID, fileName, newRow):
+        # open file in append mode
+        with open(self.resultsDirectory+userID+fileName+'.csv', '+a', newline='') as csv_file:
+            writer = csv.writer(csv_file)
+            writer.writerow(newRow)
+            # writer = csv.DictWriter(csv_file, newline=dfObject)
+            # writer.writerow(newRow)
+
+    def appendDataFrameToCSV(self, userID, fileName, newDataFrame):
+        newDataFrame.to_csv(self.resultsDirectory+str(userID)+fileName+'.csv',mode='a',index=False, header=False)
 

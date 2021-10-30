@@ -1,35 +1,11 @@
 /**
  * 
  */
-$(document).ready(function () {
-  $("#table_informative").DataTable({
-	  "order": [[ 3, "desc" ]],
-	  "lengthChange": false,
-	  "pageLength": 10
-  });
-  
-  $("#table_distinct").DataTable({
-	  "order": [[ 3, "desc" ]],
-	  "lengthChange": false,
-	  "pageLength": 10
-  });
-  
+$(document).ready( function () {
   $("#table_details").DataTable({
+	  "order": [[ 3, "desc" ]],
 	  "lengthChange": false,
-	  "paging":   false,
-      "ordering": false,
-      "searching": false,
-      "info": false
-  });
-  
-  $("#table_results").DataTable({
-	  "lengthChange": true,
-	  "pageLength": 25
-  });
-  
-  $("#table_results1").DataTable({
-	  "lengthChange": true,
-	  "pageLength": 25
+	  "pageLength": 10
   });
 
   var reason = 0;

@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% import 'bootstrap/utils.html' as utils %}
+
+{% block app_content %}
+<h2>  </h2>
+    
+<br>
+<div class="container">
+	<div class="panel panel-default ">
+		<div class="panel-heading">
+		  <h3 class="panel-title"><b>Evaluation</b></h3>
+		</div>
+		<div class="panel-body">
+<!--			<h4><b> Illustrative case: </b></h4>-->
+			<div class="row">
+			  <div class="col-sm-6">
+				<div class="card h-100">
+				  <div class="card-body">
+					  <h4><b>Illustrative case:</b></h4>
+					<p class="card-text">
+						<h4>Anne works in a University. An emergency situation arises and our Intelligent System detects that Anne has a health condition
+						  known as: <b>{{ concepts[0]['conditionName'] }}</b>
+						</h4>
+					</p>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-sm-6">
+				<div class="card h-100" >
+					<div class="card-body">
+						<h4><b>Health conditions Details</b></h4>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item"><b>Health Condition Description: </b>
+								{% if concepts[0]['conditionName'] %}
+									{{ concepts[0]['conditionName'] }}
+								{% endif %}
+							</li>
+							<li class="list-group-item"><b> Health Condition name </b>
+								{% if concepts[0]['snomedConcept'] %}
+									{{ concepts[0]['snomedConcept'] }}
+								{% endif %}
+							</li>
+							  <li class="list-group-item"><b> Identifier </b>
+								  {% if concepts[0]['snomedIdentifier'] %}
+									{{ concepts[0]['snomedIdentifier'] }}
+								  {% endif %}
+							</li>
+						</ul>
+					</div>
+				</div>
+			  </div>
+			</div>
+
+<!--			<p><h4>Our system indicates this condition evolves as indicated in the following list.</h4></p>-->
+			<!-- Listing the CES and controls to indicate correctness-->
+			<form class="navbar-form navbar-left" role="navigate" method="post" aria-label="Right Align">
+				<div class="panel-body container-sm table-responsive">
+					<p>
+						<h4>
+							<b>How do you agree with the Condition Evolution Statement for this health condition?</b>
+						</h4>
+					</p>
+					{% if concepts %}
+					<table id="table_details" class="table table-striped">
+						<thead>
+							<tr>
+								<th>Info </th>
+								<th>Condition Evolution Statement</th>
+								<th>Sentence</th>
+								<th>Incorrect</th>
+								<th>Partially incorrect</th>
+								<th>Neither correct nor incorrect</th>
+								<th>Partially correct</th>
+								<th>Correct</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for dataCell in concepts %}
+							<tr>
+								<td>
+									<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#healthDetailsModal">Source</button>
+								</td>
+								{% if dataCell['predictedTag'] %}
+								   <td> {{ dataCell['predictedTag'] }}</td>
+								{% else %}
+									<td> </td>
+								{% endif %}
+								{% if dataCell['sentence'] %}
+								   <td> {{ dataCell['sentence'] }}</td>
+								{% else %}
+									<td> </td>
+								{% endif %}
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioI" value="incorrect">
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioPI" value="pi" >
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioNCNI" value="ncni" >
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioPC" value="pc"><!--  data-bs-toggle="collapse" data-bs-target="#collapseImprove" aria-expanded="false" aria-controls="collapseImprove">!-->
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioCorrect" value="correct">
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					{% else %}
+						<br><strong> No health condition to validate  </strong>
+					{% endif %}
+				</div>
+				<!-- Vertically centered modal -->
+				<div id="healthDetailsModal" class="modal fade" tabindex="-1" aria-labelledby="healthDetailsTitle" aria-hidden="true">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 id="healthDetailsTitle" class="modal-title">CES details</h5>
+								<button class="bth-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<p>This is the content</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div  id="main_answer" class="panel-body container-sm table-responsive">
+					<div  id="editCES" class="panel-body container-sm table-responsive">
+						<!-- Asking if possible to improve -->
+						<div class="collapse multi-collapse" id="collapseImprove">
+							<h4> Can you improve the annotation?</h4>
+							<button type="button" class="btn btn-primary btn-lg" value="Y" id="buttonYes">Yes</button>
+							<button type="button" class="btn btn-primary btn-lg" value="N" id="buttonNo">No</button>
+						</div>
+
+						<p></p>
+
+						<!-- Controls to input a new value for CES-->
+
+						<div class="collapse multi-collapse" id="collapseEditCES">
+							<div class="card">
+								<div class="card-header">
+									Edit Condition Evolution Statement
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-2 p-1">
+											<label class="col-sm-4 p-0 col-form-label" for="direction">Direction: </label>
+											<select class="col-sm-8 form-select" id="direction">
+												<option value="1" selected>IMPROVE</option>
+												<option value="2">DECLINE</option>
+												<option value="3">PERMANENT</option>
+												<option value="4">NONE</option>
+											</select>
+
+										</div>
+										<div class="col-md-2 p-1">
+											<label class="col-sm-4 p-0 col-form-label" for="pace">Pace: </label>
+											<select class="col-sm-8 form-select" aria-label="Default select example" id="pace">
+											  <option value="1" selected>SLOWLY</option>
+											  <option value="2">MODERATELY</option>
+											  <option value="3">FAST</option>
+											</select>
+										</div>
+										<div class="col-md-4 p-1">
+											<label class="col-sm-2 p-0 col-form-label" for="digitFrom0">From: </label>
+<!--											<div class="col-md-3 p-0">-->
+												<select class="col-sm-3 p-0 form-select" aria-label="Default select example" id="digitFrom0">
+													<option value="0" selected>0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+<!--											</div>-->
+<!--											<div class="col-md-3 p-0">-->
+												<select class="col-sm-3 p-0 form-select" aria-label="Default select example" id="digitFrom1">
+													<option value="0" selected>0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+<!--											</div>-->
+<!--											<div class="col-md-6 p-0">-->
+												<select class="col-sm-4 p-0 form-select" aria-label="Default select example" id="from-lb">
+													<option value="1" selected>MINUTES</option>
+													<option value="2">DAYS</option>
+													<option value="3">WEEKS</option>
+													<option value="4">MONTHS</option>
+													<option value="5">YEARS</option>
+												</select>
+<!--											</div>-->
+										</div>
+										<div class="col-md-4 p-1">
+											<label class="col-sm-2 p-0 col-form-label" for="digitTo0">To: </label>
+												<select class="col-sm-3 p-0 form-select" aria-label="Default select example" id="digitTo0">
+													<option value="0" selected>0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+
+												<select class="col-sm-3 p-0 form-select" aria-label="Default select example" id="digitTo1">
+													<option value="0" selected>0</option>
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+												</select>
+
+												<select class="col-sm-4 p-0 form-select" aria-label="Default select example" id="to-ub">
+													<option value="1" selected>MINUTES</option>
+													<option value="2">DAYS</option>
+													<option value="3">WEEKS</option>
+													<option value="4">MONTHS</option>
+													<option value="5">YEARS</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+
+<!--									<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">-->
+<!--										<div class="accordion-body">-->
+<!--											<div class="input-group mb-3">-->
+<!--												<label class="input-group-text" for="direction">Direction: </label>-->
+<!--												<select class="form-select" id="direction">-->
+<!--												  <option value="1" selected>IMPROVE</option>-->
+<!--												  <option value="2">DECLINE</option>-->
+<!--												  <option value="3">PERMANENT</option>-->
+<!--													<option value="4">NONE</option>-->
+<!--												</select>-->
+<!--												<label class="input-group-text" for="direction">Pace: </label>-->
+<!--												<select class="form-select" aria-label="Default select example" id="pace">-->
+<!--												  <option value="1" selected>SLOWLY</option>-->
+<!--												  <option value="2">MODERATELY</option>-->
+<!--												  <option value="3">FAST</option>-->
+<!--												</select>-->
+<!--											</div>-->
+
+<!--												<div class="input-group">-->
+<!--													<span class="input-group-text">Pace: </span>-->
+<!--													<select class="form-select" aria-label="Default select example" id="pace">-->
+<!--													  <option value="1" selected>SLOWLY</option>-->
+<!--													  <option value="2">MODERATELY</option>-->
+<!--													  <option value="3">FAST</option>-->
+<!--													</select>-->
+<!--												</div>-->
+
+<!--												Time range-->
+
+<!--												<div class="input-group">-->
+<!--													<span class="input-group-text">From: </span>-->
+<!--													<input type="text" aria-label="digit0" class="form-control">-->
+<!--													<input type="text" aria-label="digit1" class="form-control">-->
+<!--													<select class="form-select" aria-label="Default select example" id="from-lb">-->
+<!--													  <option value="1" selected>MINUTES</option>-->
+<!--													  <option value="2">DAYS</option>-->
+<!--													  <option value="3">WEEKS</option>-->
+<!--														<option value="4">MONTHS</option>-->
+<!--														<option value="5">YEARS</option>-->
+<!--													</select>-->
+<!--												</div>-->
+
+<!--												<div class="input-group">-->
+<!--													<span class="input-group-text">To: </span>-->
+<!--													<input type="text" aria-label="digit0" class="form-control">-->
+<!--													<input type="text" aria-label="digit1" class="form-control">-->
+<!--													<select class="form-select" aria-label="Default select example" id="from-ub">-->
+<!--													  <option value="1" selected>MINUTES</option>-->
+<!--													  <option value="2">DAYS</option>-->
+<!--													  <option value="3">WEEKS</option>-->
+<!--														<option value="4">MONTHS</option>-->
+<!--														<option value="5">YEARS</option>-->
+<!--													</select>-->
+<!--												</div>-->
+
+
+<!--										</div>-->
+<!--									</div>-->
+<!--								</div>-->
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<!-- Collapse Next button to continue with annotations -->
+						<div id="NextButton" class="panel-body container-sm table-responsive">
+							<p></p>
+							<div class="row justify-content-end">
+								<div class="collapse multi-collapse in" id="collapseNext">
+									<button type="submit" class="btn btn-primary btn-lg" value="next" name="next" id="buttonNext" disabled>Next</button>
+								</div>
+							</div>
+							<p></p>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block additional_scripts %}
+<script type="text/javascript">
+
+	$(document).ready(function(){
+	  $(".form-check-input").click(function(){
+	  //console.log('button click');//output the description to the console
+
+		radioValue = $("input[value='correct']:checked").val();
+		// if one correct value is active then enable the button Next
+			if (radioValue =="correct") {
+				//console.log('value correct');
+				$("#buttonNext").removeAttr("disabled");
+				$('#buttonNext').removeClass('disabled');
+				$("#collapseImprove").removeClass("collapse multi-collapse in");
+				$('#collapseImprove').addClass('collapse multi-collapse');
+				$("#collapseEditCES").removeClass("collapse multi-collapse in");
+				$('#collapseEditCES').addClass('collapse multi-collapse');
+			}else{
+				$("#buttonNext").attr("disabled", true);
+
+				$('#buttonNext').addClass('disabled');
+				//console.log('value disable');
+				// enable the controls to ask for input of new CES value
+				//$("#collapseImprove").attr("collapse multi-collapse", );
+				$('#collapseImprove').addClass('collapse multi-collapse in');
+			}
+	  });
+
+	  $("#buttonNo").click(function(){
+	  	// enable the controls for Next
+	  	$("#buttonNext").removeAttr("disabled");
+		$('#buttonNext').removeClass('disabled');
+		$("#collapseEditCES").removeClass("collapse multi-collapse in");
+		$('#collapseEditCES').addClass('collapse multi-collapse');
+	  });
+
+	  $("#buttonYes").click(function(){
+	  	// enable the controls to input a new CES value
+	  	$("#buttonNext").removeAttr("disabled");
+		$('#buttonNext').removeClass('disabled');
+		$('#collapseEditCES').addClass('collapse multi-collapse in');
+	  });
+	});
+</script>
+{% endblock %}

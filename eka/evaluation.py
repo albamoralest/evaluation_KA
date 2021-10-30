@@ -3,7 +3,7 @@ Created on 29 Sep 2021
 
 @author: acmt2
 '''
-
+import pandas as pd
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
@@ -22,7 +22,7 @@ def index():
 
     # setting a number of samples the user will evaluate
     res = DtMngmnt()
-    sample='1'
+    sample = '1'
     res.setDirectory(sample)
 
     # returns a random list of IDs
@@ -69,47 +69,108 @@ def index():
 @login_required
 def part1():
     # sample='1'
-    # setting a number of samples the user will evaluate
     res = DtMngmnt()
-
-    # res.setDirectory(sample)
     res.setDirectory(0)
-    # Verify if the user already has answered the question
     username = g.user['username']
+
     userFile = res.loadUserFile(username)
+    snmdIdentifier = userFile['p1']['current']
+    totalAnswered = userFile['p1']['total']
 
     if request.method == 'POST':
-        error = None
-        answerValue = request.form.get('next')
+        # check if errors happened during validation
+        error = request.form['errorValue']
+        print(error)
+        if len(error) > 0:
+            if error == "digitFromInvalid":
+                error = "Enter a value different than zero for label FROM."
+            elif error == "digitToInvalid":
+                error = "Enter a value different than zero for label TO."
+            else:
+                error = "Evaluation incomplete. Please verify that you have given an answer for each item on the list of CES."
 
-        if error is None:
-            # save the results
-            snmdIdentifier = request.form.get('snmdIdentifier')
-            value = res.getButtonLabel(next)
-    #         rowValues = [username,'Q1',patientID,answerValue, value]
-    #         res.appendRowsCSVresultsFile(username, rowValues)
-    #         #update session values
-    #         userFile['q1']['total'] = 1+userFile['q1']['total']
-    #         userFile['q1']['current'] = patientID
-    #         res.updateUserFile(username, userFile)
+            flash(error, "error")
         else:
-            flash(error)
+            error = None
 
+        # If not error then save response
+        if error is None:
+            snmdIdentifier = request.form['snmdIdentifier']
+            # store the results
+            # 1. The answers to the list of CES
+            # Get the list of answers
+            answerList = []
+            for i in range(0, int(request.form['totalCES'])):
+                radioGroupName = "inlineRadioOptions"+str(i)
+                # print(radioGroupName)
+                answerList.append(request.form[radioGroupName])
+            # get the condition
+            condition_df = res.getOneCondition(snmdIdentifier, '2021-09-29_AllLinkedSnomed.csv')
+
+            condition_df['evaluationAnswers'] = answerList
+            print(condition_df)
+            # save data
+            res.appendDataFrameToCSV(str(userFile['id']), 'partOneAnswersA', condition_df)
+
+            # 2. If provided the new CES
+            improveAnswer = request.form['improveAnswer']
+            print(improveAnswer)
+            if improveAnswer == 'YES':
+                # ['username','snmdIdentifier','newCES']
+                CESAnnotation = ""
+                directionAnnotation = request.form['direction']
+                if directionAnnotation == 'PERMANENT' or directionAnnotation == 'NONE':
+                    CESAnnotation = directionAnnotation
+                else:
+                    paceAnnotation = request.form['pace']
+                    durationFromAnnotationDigit0 = request.form['digitFrom0']
+                    durationFromAnnotationDigit1 = request.form['digitFrom1']
+                    durationFrom = "{}{}".format(durationFromAnnotationDigit0,
+                                                 durationFromAnnotationDigit1) if durationFromAnnotationDigit0 != '0' else "{}".format(durationFromAnnotationDigit1)
+                    durationFromAnnotationUnits = request.form['from-lb']
+                    durationToAnnotationDigit0 = request.form['digitTo0']
+                    durationToAnnotationDigit1 = request.form['digitTo1']
+                    durationTo = "{}{}".format(durationToAnnotationDigit0,
+                                               durationToAnnotationDigit1) if durationToAnnotationDigit0 != '0' else "{}".format(durationToAnnotationDigit1)
+                    durationToAnnotationUnits = request.form['to-ub']
+                    CESAnnotation = "{} {} FROM {} {} TO {} {}".format(directionAnnotation, paceAnnotation,
+                                                                       durationFrom, durationFromAnnotationUnits,
+                                                                       durationTo, durationToAnnotationUnits)
+                newCES_row = [userFile['id'], condition_df['snomedIdentifier'].iloc[0], CESAnnotation]
+                # save data
+                res.appendListToCSV(str(userFile['id']), 'partOneAnswersB', newCES_row)
+
+            # 3. Update the next snomedIdentifier to evaluate
+    #         #update session values
+            userFile['p1']['total'] = 1+userFile['p1']['total']
+            totalAnswered = userFile['p1']['total']
+            userFile['p1']['current'] = snmdIdentifier
+            res.updateUserFile(username, userFile)
+            print(totalAnswered)
+
+    snomedConceptAnnotations = {}
     # extract one by one the concepts to verify
-    if userFile['p1']['total'] == 0:
-        # take the first in the list
-        sampleNumber = res.getNumberConcepts('2021-08-19_completeDatasetLinkedSnomedN1.csv')
-        left = sampleNumber
+    # if zero, then it is the beginning of the evaluation
+    if totalAnswered == 0:
+        # create the files to store the results
+        # 1. Answers to the list of CES
+        # 2. If given, the new CES value
+        res.createCSVresultsFilesP1(userFile['id'])
 
-        snomedConceptAnnotations = res.getConceptsAnnotations(-1, '2021-08-19_completeDatasetLinkedSnomedN1.csv').to_dict()
+        # 3. Extract the snomedIdentifier and CES to evaluate
+        snomedConceptAnnotations = res.getConceptsAnnotations(-1, '2021-09-29_AllLinkedSnomed.csv').to_dict('records')
+        # print(snomedConceptAnnotations)
+        # for item in snomedConceptAnnotations:
+        #     print(item['predictedTag'])
 
-        print(snomedConceptAnnotations)
-        for item in snomedConceptAnnotations:
-            for item2 in snomedConceptAnnotations[item]:
-                print(snomedConceptAnnotations[item][item2])
     else:
-        print(userFile)
-    return render_template('webpages/part1.html', title='Part 1', concepts=snomedConceptAnnotations)
+        print(snmdIdentifier)
+        snomedConceptAnnotations = res.getConceptsAnnotations(snmdIdentifier, '2021-09-29_AllLinkedSnomed.csv').to_dict('records')
+
+    totalCesItems = len(snomedConceptAnnotations)
+    print(len(snomedConceptAnnotations))
+    return render_template('webpages/part1.html', title='First Part Study', answered=totalAnswered,
+                           concepts=snomedConceptAnnotations, items=totalCesItems)
 
 
 @bp.route('/part2', methods=('GET', 'POST'))
