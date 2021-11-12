@@ -8,20 +8,24 @@
 <br>
 <div class="container">
 	<div class="panel panel-default ">
-		<div class="panel-heading">
-		  <h3 class="panel-title"><b>Evaluation</b></h3>
-		</div>
+<!--		<div class="panel-heading">-->
+<!--		  <h3 class="panel-title"><b>Evaluation</b></h3>-->
+<!--		</div>-->
 		<div class="panel-body">
 <!--			<h4><b> Illustrative case: </b></h4>-->
 			<div class="row">
 			  <div class="col-sm-6">
 				<div class="card h-100">
 				  <div class="card-body">
-					  <h4><b>Illustrative case:</b></h4>
+					  <h4>Scenario</h4>
 					<p class="card-text">
-						<h4>Anne works in a University. An emergency situation arises and our Intelligent System detects that Anne has a health condition
-						  known as: <b>{{ concepts[0]['conditionName'] }}</b>
-						</h4>
+					A fire emergency occurs in a University campus.
+					Among the persons in the building is Anne.
+					Her health record includes the condition displayed on the right.
+					Our Intelligent system needs to decide whether Anne requires special assistance during the emergency.
+					Therefore, it needs to decide whether the condition found in the health record may still be ongoing at the time of the emergency event.
+					The system is required to make a timely assessment based on the information in the health record only.
+					Luckily, the system can use a dataset of Condition Evolution Statements.
 					</p>
 				  </div>
 				</div>
@@ -29,22 +33,41 @@
 			  <div class="col-sm-6">
 				<div class="card h-100" >
 					<div class="card-body">
-						<h4><b>Health conditions Details</b></h4>
+						<h4><b>{{ concepts[0]['conditionName'] }}</b></h4>
 						<ul class="list-group list-group-flush">
-							<li class="list-group-item"><b>Health Condition Description: </b>
-								{% if concepts[0]['conditionName'] %}
-									{{ concepts[0]['conditionName'] }}
-								{% endif %}
-							</li>
-							<li class="list-group-item"><b> Health Condition name </b>
+<!--							<li class="list-group-item"><b>Health Condition Description: </b>-->
+<!--								{% if concepts[0]['conditionName'] %}-->
+<!--									{{ concepts[0]['conditionName'] }}-->
+<!--								{% endif %}-->
+<!--							</li>-->
+							<li class="list-group-item"><b>Snomed CT Concept</b>
 								{% if concepts[0]['snomedConcept'] %}
-									{{ concepts[0]['snomedConcept'] }}
+									{{ concepts[0]['snomedConcept'] }} ({{ concepts[0]['snomedIdentifier'] }})
 								{% endif %}
 							</li>
-							  <li class="list-group-item"><b> Identifier </b>
-								  {% if concepts[0]['snomedIdentifier'] %}
-									{{ concepts[0]['snomedIdentifier'] }}
-								  {% endif %}
+<!--							  <li class="list-group-item"><b>Identifier </b>-->
+<!--								  {% if concepts[0]['snomedIdentifier'] %}-->
+<!--									{{ concepts[0]['snomedIdentifier'] }}-->
+<!--								  {% endif %}-->
+<!--							</li>-->
+							<li class="list-group-item">
+								Source(s):
+								{% if sources %}
+									<table class="table table-borderless">
+									  <tbody>
+									  	{% for sourceLink in sources %}
+										<tr>
+											<td>
+												{{ sourceLink['source'] }}
+											</td>
+										  <td>
+											  <a href="{{ sourceLink['url'] }}" target="_blank" rel="noopener noreferrer">{{ sourceLink['type'] }}</a>
+										  </td>
+										</tr>
+									  	{% endfor %}
+									  </tbody>
+									</table>
+								{% endif %}
 							</li>
 						</ul>
 					</div>
@@ -58,7 +81,7 @@
 				<div class="panel-body container-sm table-responsive">
 					<p>
 						<h4>
-							<b>How do you agree with the Condition Evolution Statement for this health condition?</b>
+							<b>Considering the scenario above, how do you agree with the following Condition Evolution Statements?</b>
 						</h4>
 					</p>
 					{% if concepts %}
@@ -67,7 +90,7 @@
 							<tr>
 								<th>Info </th>
 								<th>Condition Evolution Statement</th>
-								<th>Sentence</th>
+<!--								<th>Sentence</th>-->
 								<th>Incorrect</th>
 								<th>Partially incorrect</th>
 								<th>Neither correct nor incorrect</th>
@@ -79,15 +102,11 @@
 							{% for dataCell in concepts %}
 							<tr>
 								<td>
-									<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#healthDetailsModal">Source</button>
+<!--									<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#healthDetailsModal">More info</button>-->
+									<a data-toggle="modal" href="#healthDetailsModal" data-id="{{dataCell['index']}}" data-source="{{dataCell['source']}}" data-sentence="{{dataCell['sentence']}}">More info</a>
 								</td>
 								{% if dataCell['predictedTag'] %}
 								   <td> {{ dataCell['predictedTag'] }}</td>
-								{% else %}
-									<td> </td>
-								{% endif %}
-								{% if dataCell['sentence'] %}
-								   <td> {{ dataCell['sentence'] }}</td>
 								{% else %}
 									<td> </td>
 								{% endif %}
@@ -115,18 +134,23 @@
 					{% endif %}
 				</div>
 				<!-- Vertically centered modal -->
-				<div id="healthDetailsModal" class="modal fade" tabindex="-1" aria-labelledby="healthDetailsTitle" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered">
+				<div id="healthDetailsModal" class="modal fade" role="dialog" aria-hidden="true" tabindex="-1" aria-labelledby="healthDetailsTitle">
+					<div class="modal-dialog modal-dialog-centered" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 id="healthDetailsTitle" class="modal-title">CES details</h5>
-								<button class="bth-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+								<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
 							</div>
 							<div class="modal-body">
-								<p>This is the content</p>
+								<b>Source:</b>
+								<p id="lblSource"></p>
+								<b>Sentence:</b>
+								<p id="lblSentence"></p>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 							</div>
 						</div>
 					</div>
@@ -135,20 +159,19 @@
 				<div  id="main_answer" class="panel-body container-sm table-responsive">
 <!--					<div  id="editCES" class="panel-body container-sm table-responsive">-->
 						<!-- Asking if possible to improve -->
-						<div class="row justify-content-end" id="editCES">
-							<div class="col-3 collapse multi-collapse" id="collapseImprove">
-								<h4> Can you improve the annotation?</h4>
+						<div class="row" id="editCES">
+							<div class="col-6 collapse multi-collapse show" id="collapseImprove">
+								<h4> Can you help us improve this Condition Evolution Statement?</h4>
 								<div>
-									<button type="button" class="btn btn-primary btn-lg" value="Y" id="buttonYes">Yes</button>
-									<button type="button" class="btn btn-primary btn-lg" value="N" id="buttonNo">No</button>
+<!--									<button type="button" class="btn btn-primary btn-lg" value="Y" id="buttonYes">Yes</button>-->
+<!--									<button type="button" class="btn btn-primary btn-lg" value="N" id="buttonNo">No</button>-->
 								</div>
 							</div>
 						</div>
 						<p></p>
 
 						<!-- Controls to input a new value for CES-->
-
-						<div class="collapse multi-collapse" id="collapseEditCES">
+						<div class="collapse multi-collapse show" id="collapseEditCES">
 							<div class="card">
 								<div class="card-header">
 									Edit Condition Evolution Statement
@@ -172,37 +195,26 @@
 											  <option value="FAST">FAST</option>
 											</select>
 										</div>
-										<div class="col-md-4 p-1">
-											<label class="input-group-text" for="digitFrom0">From: </label>
-											<div class="col-md-3 p-0">
-												<select class="form-select form-select-lg" aria-label="Default select example" id="digitFrom0" name="digitFrom0">
-													<option value="0" selected>0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
+										<div class="col-md-2 p-1">
+											<label class="input-group-text" for="value-from">From: </label>
+<!--											<div class="col-md-3 p-0">-->
+<!--												<select class="form-select form-select-lg" aria-label="Default select example" id="digitFrom0" name="digitFrom0">-->
+<!--													<option value="0" selected>0</option>-->
+<!--													<option value="1">1</option>-->
+<!--													<option value="2">2</option>-->
+<!--													<option value="3">3</option>-->
+<!--													<option value="4">4</option>-->
+<!--													<option value="5">5</option>-->
+<!--													<option value="6">6</option>-->
+<!--													<option value="7">7</option>-->
+<!--													<option value="8">8</option>-->
+<!--													<option value="9">9</option>-->
+<!--												</select>-->
+<!--											</div>-->
+											<div class="col-md-4 p-0">
+												<input type="text" class="form-control col-12" placeholder="0" id="value-from" name="value-from">
 											</div>
-											<div class="col-md-3 p-0">
-												<select class="form-select form-select-lg" aria-label="Default select example" id="digitFrom1" name="digitFrom1">
-													<option value="0" selected>0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</div>
-											<div class="col-md-6 p-0">
+											<div class="col-md-8 p-1">
 												<select class="form-select form-select-lg" aria-label="Default select example" id="from-lb" name="from-lb">
 													<option value="MINUTES" selected>MINUTES</option>
 													<option value="DAYS">DAYS</option>
@@ -212,37 +224,26 @@
 												</select>
 											</div>
 										</div>
-										<div class="col-md-4 p-1">
-											<label class="input-group-text" for="digitTo0">To: </label>
-											<div class="col-md-3 p-0">
-												<select class="form-select form-select-lg" aria-label="Default select example" id="digitTo0" name="digitTo0">
-													<option value="0" selected>0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
+										<div class="col-md-2 p-1">
+											<label class="input-group-text" for="value-to">To: </label>
+<!--											<div class="col-md-3 p-0">-->
+<!--												<select class="form-select form-select-lg" aria-label="Default select example" id="digitTo0" name="digitTo0">-->
+<!--													<option value="0" selected>0</option>-->
+<!--													<option value="1">1</option>-->
+<!--													<option value="2">2</option>-->
+<!--													<option value="3">3</option>-->
+<!--													<option value="4">4</option>-->
+<!--													<option value="5">5</option>-->
+<!--													<option value="6">6</option>-->
+<!--													<option value="7">7</option>-->
+<!--													<option value="8">8</option>-->
+<!--													<option value="9">9</option>-->
+<!--												</select>-->
+<!--											</div>-->
+											<div class="col-md-4 p-0">
+												<input type="text" class="form-control col-12" placeholder="0" id="value-to" name="value-to">
 											</div>
-											<div class="col-md-3 p-0">
-												<select class="form-select form-select-lg" aria-label="Default select example" id="digitTo1" name="digitTo1">
-													<option value="0" selected>0</option>
-													<option value="1">1</option>
-													<option value="2">2</option>
-													<option value="3">3</option>
-													<option value="4">4</option>
-													<option value="5">5</option>
-													<option value="6">6</option>
-													<option value="7">7</option>
-													<option value="8">8</option>
-													<option value="9">9</option>
-												</select>
-											</div>
-											<div class="col-md-6 p-0">
+											<div class="col-md-8 p-1">
 												<select class="form-select form-select-lg" aria-label="Default select example" id="to-ub" name="to-ub">
 													<option value="MINUTE" selected>MINUTES</option>
 													<option value="DAY">DAYS</option>
@@ -250,6 +251,14 @@
 													<option value="MONTH">MONTHS</option>
 													<option value="YEAR">YEARS</option>
 												</select>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-check">
+											  <input class="form-check-input" type="checkbox" id="noImprove" value="newCES">
+											  <label class="form-check-label" for="noImprove">
+												  Please check in case you CANNOT provide a new Condition Evolution Statement
+											  </label>
 											</div>
 										</div>
 									</div>
@@ -268,7 +277,7 @@
 						<p></p>
 						<input type="hidden" id="totalCES" name="totalCES" value="{{ items }}">
 						<input type="hidden" id="errorValue" name="errorValue" value="">
-						<input type="hidden" id="improveAnswer" name="improveAnswer" value="">
+						<input type="hidden" id="improveAnswer" name="improveAnswer" value="newCES">
 						<input type="hidden" id="snmdIdentifier" name="snmdIdentifier" value="{{ concepts[0]['snomedIdentifier'] }}">
 					</div>
 				</div>
@@ -281,19 +290,32 @@
 <script type="text/javascript">
 
 	$(document).ready(function(){
+		$('#healthDetailsModal').on('show.bs.modal', function (event) {
+			console.log('MODAL');
+			var button = $(event.relatedTarget); // Button that triggered the modal
+			var recipient = button.data('id'); // Extract info from data-* attributes
+			var source = button.data('source');
+			var sentence = button.data('sentence');
+
+			var modal = $(this);
+			//modal.find('.modal-title').text('New message to ' + recipient);
+			modal.find('#lblSource').text(source);
+			modal.find('#lblSentence').text(sentence);
+		});
+
 		$(".form-check-input").click(function(){
 		//$("input:radio").click(function(){
-			//console.log('button click');//output the description to the console
+			console.log('button click');//output the description to the console
 			// if all checked then value = True, if at least one is not checked then false
 			var check = validateAllRadiosCheck();
 			//console.log(check);
 			if(check){
-				//console.log("True");
+				console.log("True");
 				// activate Next button
-				//$("#buttonNext").removeAttr("disabled");
-				//$('#buttonNext').removeClass('disabled');
+				$("#buttonNext").removeAttr("disabled");
+				$('#buttonNext').removeClass('disabled');
 				// activate question to improve value
-				$('#collapseImprove').addClass('collapse multi-collapse in');
+				//$('#collapseImprove').addClass('collapse multi-collapse in');
 			}
 		});
 
@@ -333,9 +355,34 @@
 
 			// validate two digits are not zero at the same time
 			var valueSelected  = $("#improveAnswer").val();
-			if (valueSelected == "YES"){
-				var checkDigits = validateZeroDigits();
+
+			// validate if participant can improve value or not numberValidation
+			if (valueSelected == "newCES"){
+				console.log("TRUE");
+				// validate that both input boxes contain a number and not other characters
+				// if true, the value is a number
+				var isNumber  = validateInputIsNumber();
+				if (isNumber == true){
+					// verify that the values are not zero
+					var checkDigits = validateZeroDigits();
+				}
 			}
+		});
+
+		$('input[type="checkbox"]').click(function() {
+			// If checked it means that the user cannot provide a new CES
+		  if($(this).prop("checked") == true) {
+			//alert("Checkbox is checked.");
+			$("#improveAnswer").removeAttr("value");
+			$("#improveAnswer").attr("value", "");
+			console.log("TRUE");
+		  }
+		  else if($(this).prop("checked") == false) {
+			//alert("Checkbox is unchecked.");
+			$("#improveAnswer").removeAttr("value");
+			$("#improveAnswer").attr("value", "newCES");
+			console.log("FALSE");
+		  }
 		});
 
 		$('#direction').find('option').click(function () {
@@ -346,24 +393,24 @@
 			if (textSelected == "NONE" || textSelected == "PERMANENT"){
 				// disable from controls
 				$("#pace").prop("disabled", true);
-				$("#digitFrom0").prop("disabled", true);
-				$("#digitFrom1").prop("disabled", true);
+				$("#value-to").prop("disabled", true);
+				//$("#digitFrom1").prop("disabled", true);
 				$("#from-lb").prop("disabled", true);
 
 				// disable from controls
-				$("#digitTo0").prop("disabled", true);
-				$("#digitTo1").prop("disabled", true);
+				$("#value-from").prop("disabled", true);
+				//$("#digitTo1").prop("disabled", true);
 				$("#to-ub").prop("disabled", true);
 			}else{
 				// enable controls
 				$("#pace").prop("disabled", false);
-				$("#digitFrom0").prop("disabled", false);
-				$("#digitFrom1").prop("disabled", false);
+				$("#value-to").prop("disabled", false);
+				//$("#digitFrom1").prop("disabled", false);
 				$("#from-lb").prop("disabled", false);
 
 				// disable from controls
-				$("#digitTo0").prop("disabled", false);
-				$("#digitTo1").prop("disabled", false);
+				$("#value-from").prop("disabled", false);
+				//$("#digitTo1").prop("disabled", false);
 				$("#to-ub").prop("disabled", false);
 			}
 		});
@@ -384,24 +431,42 @@
 		// validate two digits are not zero at the same time
 		function validateZeroDigits() {
 			var check = true;
-			var digitFrom0 = $("#digitFrom0").val();
-			var digitFrom1 = $("#digitFrom1").val();
+			var digitFrom = $("#value-from").val();
+			//var digitFrom1 = $("#digitFrom1").val();
 
-			var digitTo0 = $("#digitTo0").val();
-			var digitTo1 = $("#digitTo1").val();
+			var digitTo = $("#value-to").val();
+			//var digitTo1 = $("#digitTo1").val();
 
 			var direction = $("#direction").val();
 
 			if (direction != "PERMANENT" && direction != "NONE"){
-				if (digitFrom0 == "0" && digitFrom1 == "0"){
+				if (digitFrom == "0" || digitFrom == ""){
 					check = false
 					$("#errorValue").removeAttr("value");
 					$("#errorValue").attr("value", "digitFromInvalid");
-				}else if (digitTo0 == "0" && digitTo1 == "0"){
+				}else if (digitTo == "0" || digitTo == ""){
 					check = false
 					$("#errorValue").removeAttr("value");
 					$("#errorValue").attr("value", "digitToInvalid");
 				}
+			}
+			return check;
+		};
+
+		// this function is called to validate the input value is a number
+		function validateInputIsNumber() {
+			var inputTo = $("#value-to").val();
+			var inputFrom = $("#value-from").val();
+			var check = true;
+			if (isNaN(inputTo)) {
+				check = false
+				$("#errorValue").removeAttr("value");
+				$("#errorValue").attr("value", "needANumberTo");
+			}
+			if (isNaN(inputFrom)){
+				check = false;
+				$("#errorValue").removeAttr("value");
+				$("#errorValue").attr("value", "needANumberFrom");
 			}
 			return check;
 		};

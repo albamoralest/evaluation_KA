@@ -1,4 +1,4 @@
-{% extends "../templates/base.html" %}
+{% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% import 'bootstrap/utils.html' as utils %}
 
@@ -7,35 +7,241 @@
     
 <br>
 <div class="container">
-	<div class="well well-sm">
-		<h4>
-		Thank you for participating in our study. 
-		</h4>
-		
-		<h4>
-		
-		Our study uses health records that have been generated automatically. No personal or sensitive information of a particular individual has been used.
-		</h4>
-		
-		<h4>
-		
-		In this application, we present a randomly picked sample, each sample represents a person and his/her health conditions. 
-		You will be presented with a brief description of the scenario along with all the health record details or a specific person. You then
-		 will be able to answer if the person needs assistance.
-		</h4>
-
-	</div>
-
 	<div class="panel panel-default ">
-		<div class="panel-heading">
-		  <h3 class="panel-title">Question 1</h3>
-		</div>
+<!--		<div class="panel-heading">-->
+<!--		  <h3 class="panel-title">Question 1</h3>-->
+<!--		</div>-->
 		<div class="panel-body">
-			
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="card h-100">
+						<div class="card-body">
+							<h4>Scenario</h4>
+							<p class="card-text">
+
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="card h-100" >
+						<div class="card-body">
+							{% if rule4 %}
+							<h4><b>{{ rule4[0]['snomedConcept'] }}</b></h4>
+							<ul class="list-group list-group-flush">
+
+								<li class="list-group-item"><b>Snomed CT Concept</b>
+									{% if rule4[0]['snomedConcept'] %}
+									{{ rule4[0]['snomedConcept'] }} ({{ rule4[0]['snomedIdentifier'] }})
+									{% endif %}
+								</li>
+
+								<li class="list-group-item">
+									<b>CES:</b>
+								</li>
+							</ul>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<form class="navbar-form navbar-left" role="navigate" method="post" aria-label="Right Align" id="editCESform">
+				<div class="panel-body container-sm table-responsive">
+					<p>
+						<h4>
+							<b>Considering the scenario above, how do you agree with the following Condition Evolution Statements?</b>
+						</h4>
+					</p>
+					{% if rule0 %}
+					<table id="table_details" class="table table-striped">
+						<thead>
+							<tr>
+<!--								<th>Info </th>-->
+<!--								<th>Condition Evolution Statement</th>-->
+<!--								<th>Sentence</th>-->
+								<th>Incorrect</th>
+								<th>Partially incorrect</th>
+								<th>Neither correct nor incorrect</th>
+								<th>Partially correct</th>
+								<th>Correct</th>
+							</tr>
+						</thead>
+						<tbody>
+<!--							{% for dataCell in concepts %}-->
+							<tr>
+<!--								<td>-->
+<!--&lt;!&ndash;									<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#healthDetailsModal">More info</button>&ndash;&gt;-->
+<!--									<a data-toggle="modal" href="#healthDetailsModal" data-id="{{dataCell['index']}}" data-source="{{dataCell['source']}}" data-sentence="{{dataCell['sentence']}}">More info</a>-->
+<!--								</td>-->
+<!--								{% if dataCell['predictedTag'] %}-->
+<!--								   <td> {{ dataCell['predictedTag'] }}</td>-->
+<!--								{% else %}-->
+<!--									<td> </td>-->
+<!--								{% endif %}-->
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptionsRule0" id="inlineRadioI" value="incorrect">
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptionsRule0" id="inlineRadioPI" value="pi" >
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptionsRule0" id="inlineRadioNCNI" value="ncni" >
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptionsRule0" id="inlineRadioPC" value="pc"><!--  data-bs-toggle="collapse" data-bs-target="#collapseImprove" aria-expanded="false" aria-controls="collapseImprove">!-->
+								</td>
+								<td>
+									<input class="form-check-input" type="radio" name="inlineRadioOptionsRule0" id="inlineRadioCorrect" value="correct">
+								</td>
+							</tr>
+<!--							{% endfor %}-->
+						</tbody>
+					</table>
+
+					<div class="card">
+						<div class="card-header">
+							Rule A: Explanation
+						</div>
+						<div class="card-body">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>Identifier</th>
+										<th>Condition Description </th>
+										<th>Condition Evolution Statement</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for dataCell in rule0 %}
+									<tr>
+										{% if dataCell['snmdIdentifier'] %}
+										   <td> {{ dataCell['snmdIdentifier'] }}</td>
+										{% else %}
+											<td> </td>
+										{% endif %}
+										{% if dataCell['snomedConcept'] %}
+										   <td> {{ dataCell['snomedConcept'] }}</td>
+										{% else %}
+											<td> </td>
+										{% endif %}
+										{% if dataCell['predictedTag'] %}
+										   <td> {{ dataCell['predictedTag'] }}</td>
+										{% else %}
+											<td> </td>
+										{% endif %}
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					{% endif %}
+					{% if rule4 %}
+					<div class="card">
+						<div class="card-body">
+							<table id="dataTable" class="display" style="width:100%">
+								<thead>
+									<tr>
+		<!--								<th>Info </th>-->
+		<!--								<th>Condition Evolution Statement</th>-->
+		<!--								<th>Sentence</th>-->
+										<th>Incorrect</th>
+										<th>Partially incorrect</th>
+										<th>Neither correct nor incorrect</th>
+										<th>Partially correct</th>
+										<th>Correct</th>
+									</tr>
+								</thead>
+								<tbody>
+		<!--							{% for dataCell in concepts %}-->
+									<tr>
+		<!--								<td>-->
+		<!--&lt;!&ndash;									<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#healthDetailsModal">More info</button>&ndash;&gt;-->
+		<!--									<a data-toggle="modal" href="#healthDetailsModal" data-id="{{dataCell['index']}}" data-source="{{dataCell['source']}}" data-sentence="{{dataCell['sentence']}}">More info</a>-->
+		<!--								</td>-->
+		<!--								{% if dataCell['predictedTag'] %}-->
+		<!--								   <td> {{ dataCell['predictedTag'] }}</td>-->
+		<!--								{% else %}-->
+		<!--									<td> </td>-->
+		<!--								{% endif %}-->
+										<td>
+											<input class="form-check-input" type="radio" name="inlineRadioOptionsRule4" id="inlineRadioI" value="incorrect">
+										</td>
+										<td>
+											<input class="form-check-input" type="radio" name="inlineRadioOptionsRule4" id="inlineRadioPI" value="pi" >
+										</td>
+										<td>
+											<input class="form-check-input" type="radio" name="inlineRadioOptionsRule4" id="inlineRadioNCNI" value="ncni" >
+										</td>
+										<td>
+											<input class="form-check-input" type="radio" name="inlineRadioOptionsRule4" id="inlineRadioPC" value="pc"><!--  data-bs-toggle="collapse" data-bs-target="#collapseImprove" aria-expanded="false" aria-controls="collapseImprove">!-->
+										</td>
+										<td>
+											<input class="form-check-input" type="radio" name="inlineRadioOptionsRule4" id="inlineRadioCorrect" value="correct">
+										</td>
+									</tr>
+		<!--							{% endfor %}-->
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<p></p>
+
+					<div class="card">
+						<div class="card-header">
+							RuleD : Explanation
+						</div>
+						<div class="card-body">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th>Identifier</th>
+										<th>Condition Description </th>
+										<th>Condition Evolution Statement</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for dataCell in rule4 %}
+									<tr>
+										{% if dataCell['descendantId'] %}
+										   <td> {{ dataCell['descendantId'] }}</td>
+										{% else %}
+											<td> </td>
+										{% endif %}
+										{% if dataCell['descendantConcept'] %}
+										   <td> {{ dataCell['descendantConcept'] }}</td>
+										{% else %}
+											<td> </td>
+										{% endif %}
+<!--										{% if dataCell['predictedTag'] %}-->
+<!--										   <td> {{ dataCell['predictedTag'] }}</td>-->
+<!--										{% else %}-->
+											<td> </td>
+<!--										{% endif %}-->
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					{% else %}
+						<br><strong> No health condition to validate  </strong>
+					{% endif %}
+				</div>
+			</form>
 		</div>
 	</div>
-
-
 </div>
 
+{% endblock %}
+
+{% block additional_scripts %}
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#dataTable').DataTable( {
+			"pagingType": "full_numbers"
+		} );
+	} );
+</script>
 {% endblock %}

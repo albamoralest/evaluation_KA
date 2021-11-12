@@ -70,8 +70,7 @@ def login():
                 session['admin'] = True
             else:
                 session['admin'] = False
-            
-            
+
             return redirect(url_for('index'))
         
         flash(error)

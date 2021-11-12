@@ -18,6 +18,7 @@ from csv import writer
 class DtMngmnt():
     resultsDirectory = 0
     resourcesDirectory = 0
+    propagationDirectory = 0
     '''
     classdocs
     '''
@@ -27,8 +28,11 @@ class DtMngmnt():
         return '<Results {}>'.format(self.body)
     
     def setDirectory(self, sample):
-        self.resultsDirectory = os.getcwd()+ '/eka/users/'
+        self.resultsDirectory = os.getcwd() + '/eka/users/'
+        # Resources for part 1
         self.resourcesDirectory = os.getcwd()+'/eka/resources/'
+        # Resources for part 2, propagation
+        self.propagationDirectory = os.getcwd()+'/eka/propagation/'
         
     def verifyUser(self, username):
         usersList = [f for f in os.listdir(self.resultsDirectory) if not f.startswith('.')] 
@@ -128,6 +132,7 @@ class DtMngmnt():
         # if id == -1 then obtain the first id in the list
         if snmdId == -1:
             selectedId = dfNew.iloc[0]['snomedIdentifier']
+            conditionName = dfNew.iloc[0]['conditionName']
             # print(selectedId)
         else:
             # if id = XXX concept id, then obtain the next id in the list
@@ -135,15 +140,17 @@ class DtMngmnt():
             index_list = dfNew[dfNew['snomedIdentifier'] == snmdId].index[0]
             print(index_list)
             selectedId = dfNew['snomedIdentifier'].iloc[index_list+1]
+            conditionName = dfNew['conditionName'].iloc[index_list + 1]
 
         querySentence = "snomedIdentifier=='{}'".format(selectedId)
         annotationsList = dfConcepts.query(querySentence)
         # order by confidence
         annotationsList.sort_values(by=['confidence'], inplace=True, ascending=[False])
         # print(len(annotationsList))
+        # add a new index
         annotationsList['index'] = list(range(len(annotationsList)))
-
-        return annotationsList
+        print(conditionName)
+        return annotationsList, conditionName
 
     def createCSVresultsFilesP1(self,userID):
         # 1. File one: Answers to all the CES annotations
@@ -173,3 +180,56 @@ class DtMngmnt():
     def appendDataFrameToCSV(self, userID, fileName, newDataFrame):
         newDataFrame.to_csv(self.resultsDirectory+str(userID)+fileName+'.csv',mode='a',index=False, header=False)
 
+    def getSourcesLinks(self, conditionName, fileName):
+        dfConcepts = self.readCSVFile(fileName)
+
+        querySentence = "conditionName=='{}'".format(conditionName)
+        sourcesList_df = dfConcepts.query(querySentence)
+        sourcesList_df['type'] = sourcesList_df['type'].str.replace('.json', '')
+
+        return sourcesList_df
+
+    def readCSVFileDirectory(self, fileName, typeDirectory):
+        if typeDirectory == 'propagation':
+            localPath = self.propagationDirectory + fileName
+        else:
+            localPath = self.resourcesDirectory + fileName
+        try:
+            # with open(localPath, newline='') as f:
+            #     reader = csv.reader(f)
+            #     samplelist = list(reader)
+            dfConcepts = pd.read_csv(localPath)
+            # returns a dataframe object
+            return dfConcepts
+        except Exception as e:
+            print("EX: " + str(e))
+
+    def getPropagatedConcepts(self, snmdId, fileName):
+        # read doc
+        dfConcepts = self.readCSVFileDirectory(fileName, 'propagation')
+        print(len(dfConcepts))
+        dfConcepts['snomedIdentifier'] = dfConcepts['snomedIdentifier'].map(str)
+        # order by id
+        dfConcepts.sort_values(by=['snomedIdentifier'], inplace=True, ascending=[True])
+        # delete duplicates
+        dfNew = dfConcepts.drop_duplicates(subset=['snomedIdentifier'], keep="first", inplace=False, ignore_index=True)
+
+        # if id == -1 then obtain the first id in the list
+        if snmdId == -1:
+            selectedId = dfNew.iloc[0]['snomedIdentifier']
+            # print(selectedId)
+        else:
+            # if id = XXX concept id, then obtain the next id in the list
+            # index_list = dfNew.index[dfNew['snomedIdentifier']==snmdId].tolist()
+            index_list = dfNew[dfNew['snomedIdentifier'] == snmdId].index[0]
+            print(index_list)
+            selectedId = dfNew['snomedIdentifier'].iloc[index_list+1]
+
+        querySentence = "snomedIdentifier=='{}'".format(selectedId)
+        annotationsList = dfConcepts.query(querySentence)
+        # order by confidence
+        annotationsList.sort_values(by=['descendantConcept'], inplace=True, ascending=[False])
+        # print(len(annotationsList))
+        # add a new index
+        annotationsList['index'] = list(range(len(annotationsList)))
+        return annotationsList

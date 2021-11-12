@@ -68,7 +68,6 @@ def index():
 @bp.route('/webpages/part1', methods=('GET', 'POST'))
 @login_required
 def part1():
-    # sample='1'
     res = DtMngmnt()
     res.setDirectory(0)
     username = g.user['username']
@@ -86,6 +85,10 @@ def part1():
                 error = "Enter a value different than zero for label FROM."
             elif error == "digitToInvalid":
                 error = "Enter a value different than zero for label TO."
+            elif error == "needANumberTo":
+                error = "Enter a numeric value for label TO."
+            elif error == "needANumberFrom":
+                error = "Enter a numeric value for label FROM."
             else:
                 error = "Evaluation incomplete. Please verify that you have given an answer for each item on the list of CES."
 
@@ -96,13 +99,11 @@ def part1():
         # If not error then save response
         if error is None:
             snmdIdentifier = request.form['snmdIdentifier']
-            # store the results
             # 1. The answers to the list of CES
             # Get the list of answers
             answerList = []
             for i in range(0, int(request.form['totalCES'])):
                 radioGroupName = "inlineRadioOptions"+str(i)
-                # print(radioGroupName)
                 answerList.append(request.form[radioGroupName])
             # get the condition
             condition_df = res.getOneCondition(snmdIdentifier, '2021-09-29_AllLinkedSnomed.csv')
@@ -115,7 +116,7 @@ def part1():
             # 2. If provided the new CES
             improveAnswer = request.form['improveAnswer']
             print(improveAnswer)
-            if improveAnswer == 'YES':
+            if improveAnswer == 'newCES':
                 # ['username','snmdIdentifier','newCES']
                 CESAnnotation = ""
                 directionAnnotation = request.form['direction']
@@ -123,15 +124,9 @@ def part1():
                     CESAnnotation = directionAnnotation
                 else:
                     paceAnnotation = request.form['pace']
-                    durationFromAnnotationDigit0 = request.form['digitFrom0']
-                    durationFromAnnotationDigit1 = request.form['digitFrom1']
-                    durationFrom = "{}{}".format(durationFromAnnotationDigit0,
-                                                 durationFromAnnotationDigit1) if durationFromAnnotationDigit0 != '0' else "{}".format(durationFromAnnotationDigit1)
+                    durationFrom = request.form['value-from']
                     durationFromAnnotationUnits = request.form['from-lb']
-                    durationToAnnotationDigit0 = request.form['digitTo0']
-                    durationToAnnotationDigit1 = request.form['digitTo1']
-                    durationTo = "{}{}".format(durationToAnnotationDigit0,
-                                               durationToAnnotationDigit1) if durationToAnnotationDigit0 != '0' else "{}".format(durationToAnnotationDigit1)
+                    durationTo = request.form['value-to']
                     durationToAnnotationUnits = request.form['to-ub']
                     CESAnnotation = "{} {} FROM {} {} TO {} {}".format(directionAnnotation, paceAnnotation,
                                                                        durationFrom, durationFromAnnotationUnits,
@@ -140,15 +135,14 @@ def part1():
                 # save data
                 res.appendListToCSV(str(userFile['id']), 'partOneAnswersB', newCES_row)
 
-            # 3. Update the next snomedIdentifier to evaluate
-    #         #update session values
+            # 3. Update session values
             userFile['p1']['total'] = 1+userFile['p1']['total']
             totalAnswered = userFile['p1']['total']
             userFile['p1']['current'] = snmdIdentifier
             res.updateUserFile(username, userFile)
             print(totalAnswered)
 
-    snomedConceptAnnotations = {}
+    # snomedConceptAnnotations = {}
     # extract one by one the concepts to verify
     # if zero, then it is the beginning of the evaluation
     if totalAnswered == 0:
@@ -158,52 +152,54 @@ def part1():
         res.createCSVresultsFilesP1(userFile['id'])
 
         # 3. Extract the snomedIdentifier and CES to evaluate
-        snomedConceptAnnotations = res.getConceptsAnnotations(-1, '2021-09-29_AllLinkedSnomed.csv').to_dict('records')
-        # print(snomedConceptAnnotations)
-        # for item in snomedConceptAnnotations:
-        #     print(item['predictedTag'])
+        # Method returs a df but it is transformed to a dictionary
+        snmdIdentifier = -1
+        # snomedConceptAnnotations = res.getConceptsAnnotations(-1, '2021-09-29_AllLinkedSnomed.csv').to_dict('records')
+    # else:
+        # print(snmdIdentifier)
+        # Method returs a df but it is transformed to a dictionary
+        # snomedConceptAnnotations = res.getConceptsAnnotations(snmdIdentifier, '2021-09-29_AllLinkedSnomed.csv').to_dict('records')
 
-    else:
-        print(snmdIdentifier)
-        snomedConceptAnnotations = res.getConceptsAnnotations(snmdIdentifier, '2021-09-29_AllLinkedSnomed.csv').to_dict('records')
+    snomedConceptAnnotations,conditionName = res.getConceptsAnnotations(snmdIdentifier, '2021-09-29_AllLinkedSnomed.csv')
+    sourcesLinks = res.getSourcesLinks(conditionName,'2021-05-31_TotalFilesConditions.csv')
+    print(sourcesLinks)
 
     totalCesItems = len(snomedConceptAnnotations)
     print(len(snomedConceptAnnotations))
     return render_template('webpages/part1.html', title='First Part Study', answered=totalAnswered,
-                           concepts=snomedConceptAnnotations, items=totalCesItems)
+                           concepts=snomedConceptAnnotations.to_dict('records'), items=totalCesItems, sources=sourcesLinks.to_dict('records'))
 
 
 @bp.route('/part2', methods=('GET', 'POST'))
 @bp.route('/webpages/part2', methods=('GET', 'POST'))
 @login_required
 def part2():
-    # sample='1'
-    # setting a number of samples the user will evaluate
     res = DtMngmnt()
-
-    # res.setDirectory(sample)
     res.setDirectory(0)
     # Verify if the user already has answered the question
     username = g.user['username']
     userFile = res.loadUserFile(username)
+    # current evaluation
+    snmdIdentifier = userFile['p2']['current']
+    totalAnswered = userFile['p2']['total']
 
-    # if request.method == 'POST':
+    if request.method == 'POST':
+        error = None
+        answerValue = request.form.get('answer')
     #
-    #     error=None
-    #     answerValue = request.form.get('answer')
-    #
-    #     if error is None:
-    #         #save the results
+        if error is None:
+            #save the results
     #         patientID =request.form.get('patient')
     #         value = res.getButtonLabel(answerValue)
     #         rowValues = [username,'Q1',patientID,answerValue, value]
     #         res.appendRowsCSVresultsFile(username, rowValues)
-    #         #update session values
-    #         userFile['q1']['total'] = 1+userFile['q1']['total']
-    #         userFile['q1']['current'] = patientID
-    #         res.updateUserFile(username, userFile)
-    #     else:
-    #         flash(error)
+            #update session values
+            userFile['p2']['total'] = 1+userFile['p2']['total']
+            totalAnswered = userFile['p2']['total']
+            userFile['p2']['current'] = snmdIdentifier
+            res.updateUserFile(username, userFile)
+        else:
+            flash(error)
     #
     # #returns a random list of IDs
     # sampleList = res.returnRandomSample()
@@ -235,7 +231,14 @@ def part2():
     #
     # patientRelevantInf = patient['patient']['completeData']
     # patientDistinctDatapoints = res.getDistinctDatapoints(patient['patient']['completeData'])
+    ruleOneList = {}
+    ruleFourList = {}
+    if totalAnswered == 0:
+        snmdIdentifier = -1
 
-    return render_template('webpages/question2.html', title='Part 3')  # ,sample=sample, total=sampleNumber,
+    ruleFourList = res.getPropagatedConcepts(snmdIdentifier, '2021-07-12_04PropAttributesRules.csv').to_dict('records')
+
+    return render_template('webpages/part2.html', title='Part 2', rule1=ruleOneList, rule4=ruleFourList)
+    # ,sample=sample, total=sampleNumber,
     # left=left, distinctDatapoints=patientDistinctDatapoints,
     # title='Question 1', details=patientDetails,relevant=patientRelevantInf)
