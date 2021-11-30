@@ -12,26 +12,23 @@
 		Thank you for participating in our study. 
 		</h4>
 		
-		<h4>
-		
-		Our study uses information collected from public data sources such as NHS England and MAYO Clinic.
-		The study is divided in two parts:
-		The "Part 1" is dedicated to evaluate the accuracy of 
-		
-<!--		The condition evolution annotation for each health condition is extracted automatically from these data sources.-->
-<!--		No personal or sensitive information of a particular individual has been used.-->
-		</h4>
-		
-		<h4>
-		"Part 2"  is dedicated to
-<!--		In this application, we present a randomly picked sample of health conditions.-->
-<!--		For each health condition you will be presented with a list of possible recovery time.-->
-<!--		You will be presented with three options:-->
-<!--		a brief description of the scenario along with all the health record details or a specific person. -->
-<!--		You then-->
-<!--		 will be able to answer if the person needs assistance.-->
-		</h4>
 
+		<p>
+			This research study focuses on evaluating the accuracy of the information in a database, which was extracted
+			automatically from reliable public sources, such as the NHS England website. Your expertise will allow us to
+			validate the accuracy of our approach to extract health condition evolution from public sources. This study
+			is part or a larger research aimed at using people’s health records to identify relevant information.
+		</p>
+		<p>
+			The study is divided into two parts:
+		</p>
+		<p>
+			<b> For Part 1, </b> we will ask you whether a given condition evolution statement is correct or not and,
+			if possible, to input an accurate value.
+		</p>
+		<p>
+			<b> For Part 2,</b> present a series of health conditions and ask whether they progress in a similar way.
+		</p>
 	</div>
 
 	<div class="row">
@@ -42,24 +39,28 @@
 				</div>
 				<div class="panel-body">
 					<div class="row">
-						<div class="col-sm-12">
+						<div class="col-sm-4">
 							<div class="list-group">
-								<a href="{{url_for('evaluation.part1', title='Part 1')}}" class="list-group-item list-group-item active">Link1</a>
+<!--								<a href="{{url_for('evaluation.part1', title='Part 1')}}" class="list-group-item list-group-item active">Start study</a>-->
+								<a href="{{url_for('evaluation.part1', title='Part 1')}}" class="list-group-item list-group-item active">{{ labelp1 }}</a>
 							</div>
 						</div>
-						<!-- <div class="col-sm-4">
-							<ul class="list-group">
-								<li class="list-group-item">
-									<div class="progress">
-										<div class="progress-bar" role="progressbar" style="width: {{q1number}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
-										  {% if q1number %}
-											{{ q1number }} %
-										  {% endif %}
-										</div>
-									</div>
-								</li>
-							</ul>
-						</div> -->
+<!--					</div>-->
+<!--					<div class="row">-->
+<!--						<div class="col-sm-2">-->
+<!--							<p class="text-start">Progress...</p>-->
+<!--						</div>-->
+						<div class="col-sm-8">
+							<label for="divProgress" class="form-label">Progress...</label>
+							<div class="progress" style="height: 40px" id="divProgress">
+								<div class="progress-bar progress-bar-striped" role="progressbar" style="min-width: 2em;width: {{p1number}}%" aria-valuenow="{{p1number}}%" aria-valuemin="0" aria-valuemax="100" >
+									<a href="{{url_for('evaluation.part1', title='Part 1')}}" class="list-group-item list-group-item active" role="button">
+										<b>
+										{{ p1number }} % objective completed</b>
+									</a>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -67,28 +68,26 @@
 		<div class="col-sm-6">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-				  <h3 class="panel-title">User study Part 2</h3>
+				  <h3 class="panel-title">User study Part  2</h3>
 				</div>
 				<div class="panel-body">
 				  <div class="row">
-						<div class="col-sm-12">
+						<div class="col-sm-4">
 							<div class="list-group">
-								<a href="{{url_for('evaluation.part2', sample=2)}}" class="list-group-item list-group-item active">Link2</a>
+								<a href="{{url_for('evaluation.part2', sample=2)}}" class="list-group-item list-group-item active">{{ labelp2 }}</a>
 							</div>
 						</div>
-						<!-- <div class="col-sm-4">
-							<ul class="list-group">
-								<li class="list-group-item">
-									<div class="progress">
-										<div class="progress-bar" role="progressbar" style="width: {{q2number}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
-										  {% if q2number %}
-											{{ q2number }} %
-										  {% endif %}
-										</div>
-									</div>
-								</li>
-							</ul>
-						</div> -->
+						<div class="col-sm-8">
+							<label for="divProgress2" class="form-label">Progress...</label>
+							<div class="progress" style="height: 40px" id="divProgress2">
+								<div class="progress-bar" role="progressbar" style="width: {{p2number}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
+									<a href="{{url_for('evaluation.part2', title='Part 2')}}" class="list-group-item list-group-item active">
+										<b>
+										{{ p2number }} % objective completed</b>
+									</a>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

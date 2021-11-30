@@ -1,0 +1,105 @@
+snomedConcept,snomedDesConcept,snomedDesIdentifier,snomedIdentifier
+Administrative procedure,Hospital admission from dialysis facility (procedure),432621000124105,14734007
+Agreeing on diabetes care plan (procedure),Agreeing on diabetes care plan (procedure),703040004,703040004
+Allergic disorder monitoring (regime/therapy),Allergic disorder follow-up assessment (regime/therapy),170838006,170836005
+Allergy screening test (procedure),Allergy screening test (procedure),395142003,395142003
+Alpha-1-Fetoprotein measurement (procedure),Measurement of alpha fetoprotein and analysis of chromosomes in amniotic fluid specimen (procedure),444311009,80152001
+Antibody screen (procedure),Antenatal screening for isoimmunization (procedure),717802007,120646007
+Antigen assay (procedure),Measurement of Hepatitis B antigen (procedure),726450005,121276004
+Asthma follow-up (regime/therapy),Asthma follow-up (regime/therapy),394701000,394701000
+Asthma management (regime/therapy),Asthma self management (regime/therapy),699728000,406162001
+Attribute (attribute),Unit of presentation size unit (attribute),320091000221107,246061005
+Auscultation (procedure),Auscultation of lower respiratory tract (procedure),449264008,37931006
+Awaiting transplantation of lung (situation),Awaiting transplantation of lung (situation),16602611000119108,16602611000119108
+Bleeding from anus (disorder),Bleeding internal hemorrhoid grade II (disorder),15970301000119109,6072007
+Body mass index 30+ - obesity (finding),Body mass index 30+ - obesity (finding),162864005,162864005
+Body mass index 40+ - severely obese (finding),Body mass index 40+ - severely obese (finding),408512008,408512008
+Bone density scan (procedure),Bone density scan (procedure),312681000,312681000
+Bone immobilization (procedure),Bone immobilization (procedure),274474001,274474001
+Bullet wound (disorder),Bullet wound (disorder),262574004,262574004
+Collection of blood specimen for laboratory (procedure),Collection of blood via arterial catheter (procedure),699873000,82078001
+Computed tomography of chest and abdomen (procedure),Computed tomography angiography of thorax and abdomen and pelvis with contrast (procedure),16462121000119108,418891003
+"Cystic fibrosis, prenatal detection (procedure)","Cystic fibrosis, prenatal detection (procedure)",67799006,67799006
+Detection of chromosomal aneuploidy in prenatal amniotic fluid specimen using fluorescence in situ hybridization screening technique (procedure),Detection of chromosomal aneuploidy in prenatal amniotic fluid specimen using fluorescence in situ hybridization screening technique (procedure),443529005,443529005
+Diagnostic fiberoptic bronchoscopy (procedure),Diagnostic fiberoptic bronchoscopy (procedure),173160006,173160006
+Discussion about procedure (procedure),Discussion about solid organ transplantation (procedure),738065000,223483004
+Environment (environment),Transitional housing (environment),25911000087103,276339004
+Evaluation of uterine fundal height (procedure),Evaluation of uterine fundal height (procedure),274804006,274804006
+Excision of sentinel lymph node (procedure),Excision of sentinel lymph node (procedure),443497002,443497002
+Facial laceration (disorder),Laceration of left eyebrow (disorder),16527081000119105,370247008
+Fetal anatomy study (procedure),Fetal anatomy study (procedure),271442007,271442007
+Fracture care (regime/therapy),Fracture care (regime/therapy),385691007,385691007
+Glucose tolerance test (procedure),"Glucose tolerance test, antenatal (procedure)",699731004,113076002
+Gonorrhea infection titer test (procedure),Gonorrhea infection titer test (procedure),165829005,165829005
+Gynecology service (qualifier value),Pregnancy termination service (qualifier value),310062002,310061009
+"Hemogram, automated, with red blood cells, white blood cells, hemoglobin, hematocrit, indices, platelet count, and manual white blood cell differential (procedure)","Hemogram, automated, with red blood cells, white blood cells, hemoglobin, hematocrit, indices, platelet count, and manual white blood cell differential (procedure)",104091002,104091002
+History of appendectomy (situation),History of appendectomy (situation),428251008,428251008
+History of cardiac arrest (situation),History of cardiac arrest (situation),429007001,429007001
+History of myocardial infarction (situation),History of myocardial infarction due to demand ischemia (situation),776219771000119107,399211009
+History of single seizure (situation),History of single seizure (situation),703151001,703151001
+Human epidermal growth factor receptor 2 gene detection by fluorescence in situ hybridization (procedure),Human epidermal growth factor receptor 2 gene detection by fluorescence in situ hybridization (procedure),434363004,434363004
+Human epidermal growth factor receptor 2 gene detection by immunohistochemistry (procedure),Human epidermal growth factor receptor 2 gene detection by immunohistochemistry (procedure),433114000,433114000
+Hypertriglyceridemia (disorder),Transient infantile hypertriglyceridemia and hepatosteatosis (disorder),773649005,302870006
+Immunotherapy (procedure),Antineoplastic chemoimmunotherapy (regime/therapy),897713009,76334006
+Induction of labor (procedure),Augmentation of labor using oxytocin (procedure),816966004,236958009
+Injection of epinephrine (procedure),Injection of epinephrine (procedure),313191000,313191000
+Injection of tetanus antitoxin (procedure),Injection of tetanus antitoxin (procedure),384700001,384700001
+Inpatient stay (finding),Inpatient stay (finding),308540004,308540004
+Inpatient stay 3 days (finding),Inpatient stay 3 days (finding),183801001,183801001
+Insertion of biventricular implantable cardioverter defibrillator (procedure),Insertion of biventricular implantable cardioverter defibrillator (procedure),447365002,447365002
+Insertion of intrauterine contraceptive device (procedure),Insertion of hormone releasing intrauterine contraceptive device (procedure),472837007,65200003
+Insertion of subcutaneous contraceptive (procedure),Insertion of etonogestrel radiopaque contraceptive implant (procedure),698972004,169553002
+Intramuscular injection (procedure),Injection of piriformis muscle (procedure),708870005,76601001
+Intravenous antibiotic therapy (procedure),Intravenous antibiotic therapy (procedure),281790008,281790008
+Intravenous blood transfusion of packed cells (procedure),Intravenous blood transfusion of packed cells (procedure),180207008,180207008
+Intravenous infusion (procedure),Intravenous radionuclide therapy using radium 223 dichloride (procedure),16554931000119102,14152002
+Intravenous injection (procedure),Intravenous injection of Methotrexate (procedure),309700001,43060002
+Intubation (procedure),Insertion of double lumen tracheobronchial tube (procedure),733509002,52765003
+Laceration of forearm (disorder),Laceration of muscle of left forearm (disorder),11773171000119100,283371005
+Laceration of hand (disorder),Laceration of left superficial palmar arch (disorder),11830601000119109,284549007
+Laceration of thigh (disorder),Laceration of thigh without foreign body (disorder),735836006,283385000
+Lifestyle education (procedure),Lifestyle adjustment training (procedure),715756009,313204009
+Manual pelvic examination (procedure),Pelvic examination under general anesthesia (procedure),244645007,35025007
+Measurement of Varicella-zoster virus antibody (procedure),Varicella-zoster virus antibody immunoglobulin M measurement (procedure),315231005,104326007
+Measurement of viral antibody (procedure),Human immunodeficiency virus 1 and virus 2 antibodies and Human immunodeficiency virus 1 p24 antigen combination immunoassay (procedure),710311002,122435008
+Medication Reconciliation (procedure),Medication Reconciliation (procedure),430193006,430193006
+Methotrexate injection into tubal pregnancy (procedure),Methotrexate injection into tubal pregnancy (procedure),236931002,236931002
+Opioid abuse (disorder),Opioid abuse (disorder),5602001,5602001
+Outpatient procedure (procedure),Management of outpatient discharge (procedure),718676006,371883000
+Passive immunization (procedure),Transfusion of immunoglobulin (procedure),16609791000119102,51116004
+Patient encounter procedure (procedure),Pharmacogenetic consultation (procedure),428931000124102,308335008
+Percutaneous coronary intervention (procedure),Percutaneous coronary intervention of right coronary artery (procedure),868248007,415070008
+Pregnancy detection examination (procedure),Sensitive pregnancy test (procedure),252161000,74036000
+Prenatal visit (regime/therapy),Prenatal visit (regime/therapy),424619006,424619006
+"Psychiatric procedure, interview AND/OR consultation (procedure)",Section examination - social worker (procedure),171426001,108311000
+Record artifact (record artifact),Paper report (record artifact),22151000087106,419891008
+Referral to clinic (procedure),Referral to hospital diabetes antenatal clinic (procedure),770811007,183851006
+Removal of intrauterine device (procedure),Removal of intrauterine contraceptive device using fluoroscopic guidance (procedure),718856002,68254000
+Removal of subcutaneous contraceptive (procedure),Removal of etonogestrel radiopaque contraceptive implant (procedure),450836008,301807007
+Replacement of contraceptive intrauterine device (procedure)   ,Replacement of contraceptive intrauterine device (procedure),46706006,46706006
+Respiratory therapy (procedure),Nocturnal dual pressure spontaneous ventilation support (regime/therapy),34291000175108,53950000
+Review of systems (procedure),Review of systems (procedure),415300000,415300000
+Routine antenatal care (regime/therapy),Routine antenatal care (regime/therapy),134435003,134435003
+Rupture of appendix (disorder),Ruptured suppurative appendicitis (disorder),95547004,47693006
+Screening finding (finding),Cystic fibrosis transmembrane conductance regulator related metabolic syndrome (finding),16434671000119101,365856005
+Screening for disorder (procedure),Carotid artery disease screening (procedure),24071000087108,312851005
+Screening for occult blood in feces (procedure),Screening for occult blood in feces (procedure),104435004,104435004
+Self-care interventions (procedure),Training to manage personal hygiene (procedure),718630007,384758001
+Smokes tobacco daily (finding),Smokes tobacco daily (finding),449868002,449868002
+Sputum examination (procedure),Microscopic cytologic examination of sputum specimen (procedure),609314005,269911007
+Suicide risk assessment (procedure),Suicide risk assessment (procedure),225337009,225337009
+Surgical manipulation of shoulder joint (procedure),Surgical manipulation of shoulder joint (procedure),387685009,387685009
+Surveillance (regime/therapy),Antihypertensive agent surveillance (regime/therapy),50161000119104,225419007
+Suspected lung cancer (situation),Suspected lung cancer (situation),162573006,162573006
+Suture open wound (procedure),Suture of laceration of lip (procedure),708790006,288086009
+Sweat test (procedure),Sweat conductivity (procedure),391293006,168172001
+Syphilis infectious titer test (procedure),Syphilis infectious titer test (procedure),269828009,269828009
+Thoracentesis (procedure),Thoracentesis using computed tomography guidance (procedure),709787009,91602002
+Ultrasonography of bilateral breasts (procedure),Ultrasonography of bilateral breasts and bilateral axillae (procedure),12711000087103,1571000087109
+Ultrasound scan of upper abdomen (procedure),"Ultrasonography of abdomen, right upper quadrant and epigastrium (procedure)",426701000119108,418398002
+Urinalysis (procedure),Urine microscopy for percentage of lymphocytes (procedure),713587006,27171005
+"Human parturition, function (observable entity)","Human parturition, function (observable entity)",386216000,386216000
+Urine protein test,Measurement of fractional excretion of amylase using urine specimen and serum or plasma specimen (procedure),447317003,57378007
+Postnatal visit (regime/therapy),Postnatal - tenth day visit (regime/therapy),169772000,169762003
+Diabetes self management plan (record artifact),Diabetes self management plan (record artifact),735985000,735985000
+Fetus with chromosomal abnormality (disorder),Fetus with complete trisomy 13 syndrome (disorder),125521000119101,267253006

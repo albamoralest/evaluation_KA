@@ -3,7 +3,6 @@ Created on 29 Sep 2021
 
 @author: acmt2
 '''
-import pandas as pd
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for
 )
@@ -18,50 +17,46 @@ bp = Blueprint('evaluation', __name__)
 @bp.route('/index')
 @login_required
 def index():
-    posts=""
-
     # setting a number of samples the user will evaluate
     res = DtMngmnt()
     sample = '1'
-    res.setDirectory(sample)
+    res.set_directory(sample)
 
-    # returns a random list of IDs
-    # sampleList = res.returnRandomSample()
-    # sampleNumber=len(sampleList)
-    # q1percentage=None
-    # q2percentage=None
+    # Annotations objective
+    objective = 50
 
     # Verify if the user already has answered the question
     username = g.user['username']
-    userFile = res.loadUserFile(username)
-    # if userFile['q1']['total'] == 0:
-    #     q1percentage = None
-    #     labelq1 = "Click to start"
-    # elif userFile['q1']['total'] == sampleNumber:
-    #     q1percentage = 100
-    #     labelq1 = "Completed"
-    # else:
-    #     q1percentage = round((userFile['q1']['total']*100)/sampleNumber)
-    #     labelq1 = "Click to continue"
+    userFile = res.load_user_file(username)
+    if userFile['p1']['total'] == 0:
+        p1percentage = None
+        labelp1 = "Click to start Part 1"
+    elif userFile['p1']['total'] == objective:
+        p1percentage = 100
+        labelp1 = "Completed"
+    else:
+        p1percentage = round((userFile['p1']['total']*100)/objective)
+        labelp1 = "Click to continue Part 1"
 
     # res.setDirectory('2')
     # sampleList = res.returnRandomSample()
     # sampleNumber=len(sampleList)
-    # if userFile['q2']['total'] == 0:
-    #     q2percentage = None
-    #     labelq2 = "Click to start"
-    # elif userFile['q2']['total'] == sampleNumber:
-    #     q2percentage = 100
-    #     labelq2 = "Completed"
-    # else:
-    #     q2percentage = round((userFile['q2']['total']*100)/sampleNumber)
-    #     labelq2 = "Click to continue"
+    if userFile['p2']['total'] == 0:
+        p2percentage = None
+        labelp2 = "Click to start Part 2"
+    elif userFile['p2']['total'] == objective:
+        p2percentage = 100
+        labelp2 = "Completed"
+    else:
+        p2percentage = round((userFile['p2']['total']*100)/objective)
+        labelp2 = "Click to continue Part 2"
 
     # return render_template('webpages/index.html', totalsample=sampleNumber,q1number=q1percentage,
     #                        q2number=q2percentage,
     #                        labelq1=labelq1,labelq2=labelq2,posts=posts)
 
-    return render_template('index.html', title='Part 1')
+    return render_template('index.html', title='User study', p1number=p1percentage, labelp1=labelp1,
+                           p2number=p2percentage, labelp2=labelp2)
 
 
 @bp.route('/part1', methods=('GET', 'POST'))
@@ -69,12 +64,12 @@ def index():
 @login_required
 def part1():
     res = DtMngmnt()
-    res.setDirectory(0)
+    res.set_directory(0)
     username = g.user['username']
 
-    userFile = res.loadUserFile(username)
-    snmdIdentifier = userFile['p1']['current']
-    totalAnswered = userFile['p1']['total']
+    user_file = res.load_user_file(username)
+    snmd_identifier = user_file['p1']['current']
+    total_answered = user_file['p1']['total']
 
     if request.method == 'POST':
         # check if errors happened during validation
@@ -98,76 +93,78 @@ def part1():
 
         # If not error then save response
         if error is None:
-            snmdIdentifier = request.form['snmdIdentifier']
+            snmd_identifier = request.form['snmdIdentifier']
             # 1. The answers to the list of CES
             # Get the list of answers
-            answerList = []
+            answer_list = []
             for i in range(0, int(request.form['totalCES'])):
-                radioGroupName = "inlineRadioOptions"+str(i)
-                answerList.append(request.form[radioGroupName])
+                radio_group_name = "inlineRadioOptions"+str(i)
+                answer_list.append(request.form[radio_group_name])
             # get the condition
-            condition_df = res.getOneCondition(snmdIdentifier, '2021-09-29_AllLinkedSnomed.csv')
+            condition_df = res.get_one_condition(snmd_identifier, '2021-09-29_AllLinkedSnomed.csv')
 
-            condition_df['evaluationAnswers'] = answerList
+            condition_df['evaluationAnswers'] = answer_list
             print(condition_df)
             # save data
-            res.appendDataFrameToCSV(str(userFile['id']), 'partOneAnswersA', condition_df)
+            res.append_data_frame_to_csv(str(user_file['id']), 'partOneAnswersA', condition_df)
 
             # 2. If provided the new CES
-            improveAnswer = request.form['improveAnswer']
-            print(improveAnswer)
-            if improveAnswer == 'newCES':
+            improve_answer = request.form['improveAnswer']
+            print(improve_answer)
+            if improve_answer == 'newCES':
                 # ['username','snmdIdentifier','newCES']
-                CESAnnotation = ""
-                directionAnnotation = request.form['direction']
-                if directionAnnotation == 'PERMANENT' or directionAnnotation == 'NONE':
-                    CESAnnotation = directionAnnotation
+                ces_annotation = ""
+                direction_annotation = request.form['direction']
+                if direction_annotation == 'PERMANENT' or direction_annotation == 'NONE':
+                    ces_annotation = direction_annotation
                 else:
-                    paceAnnotation = request.form['pace']
-                    durationFrom = request.form['value-from']
-                    durationFromAnnotationUnits = request.form['from-lb']
-                    durationTo = request.form['value-to']
-                    durationToAnnotationUnits = request.form['to-ub']
-                    CESAnnotation = "{} {} FROM {} {} TO {} {}".format(directionAnnotation, paceAnnotation,
-                                                                       durationFrom, durationFromAnnotationUnits,
-                                                                       durationTo, durationToAnnotationUnits)
-                newCES_row = [userFile['id'], condition_df['snomedIdentifier'].iloc[0], CESAnnotation]
+                    pace_annotation = request.form['pace']
+                    duration_from = request.form['value-from']
+                    duration_from_annotation_units = request.form['from-lb']
+                    duration_to = request.form['value-to']
+                    duration_to_annotation_units = request.form['to-ub']
+                    ces_annotation = "{} {} FROM {} {} TO {} {}".format(direction_annotation, pace_annotation,
+                                                                       duration_from, duration_from_annotation_units,
+                                                                       duration_to, duration_to_annotation_units)
+                new_ces_row = [user_file['id'], condition_df['snomedIdentifier'].iloc[0], request.form['snmdConcept'], ces_annotation]
                 # save data
-                res.appendListToCSV(str(userFile['id']), 'partOneAnswersB', newCES_row)
+                res.append_list_to_csv(str(user_file['id']), 'partOneAnswersB', new_ces_row)
 
             # 3. Update session values
-            userFile['p1']['total'] = 1+userFile['p1']['total']
-            totalAnswered = userFile['p1']['total']
-            userFile['p1']['current'] = snmdIdentifier
-            res.updateUserFile(username, userFile)
-            print(totalAnswered)
+            user_file['p1']['total'] = 1+user_file['p1']['total']
+            total_answered = user_file['p1']['total']
+            user_file['p1']['current'] = snmd_identifier
+            res.update_user_file(username, user_file)
+            print(total_answered)
 
     # snomedConceptAnnotations = {}
     # extract one by one the concepts to verify
     # if zero, then it is the beginning of the evaluation
-    if totalAnswered == 0:
+    if total_answered == 0:
         # create the files to store the results
         # 1. Answers to the list of CES
         # 2. If given, the new CES value
-        res.createCSVresultsFilesP1(userFile['id'])
+        res.create_csv_results_files_p1(user_file['id'])
 
         # 3. Extract the snomedIdentifier and CES to evaluate
         # Method returs a df but it is transformed to a dictionary
-        snmdIdentifier = -1
+        snmd_identifier = -1
         # snomedConceptAnnotations = res.getConceptsAnnotations(-1, '2021-09-29_AllLinkedSnomed.csv').to_dict('records')
     # else:
         # print(snmdIdentifier)
         # Method returs a df but it is transformed to a dictionary
         # snomedConceptAnnotations = res.getConceptsAnnotations(snmdIdentifier, '2021-09-29_AllLinkedSnomed.csv').to_dict('records')
 
-    snomedConceptAnnotations,conditionName = res.getConceptsAnnotations(snmdIdentifier, '2021-09-29_AllLinkedSnomed.csv')
-    sourcesLinks = res.getSourcesLinks(conditionName,'2021-05-31_TotalFilesConditions.csv')
+    # TODO:
+    # cluster samples for participants
+    snomed_concept_annotations, condition_name = res.get_concepts_annotations(snmd_identifier, '2021-09-29_AllLinkedSnomed.csv')
+    sourcesLinks = res.get_sources_links(condition_name, '2021-05-31_TotalFilesConditions.csv')
     print(sourcesLinks)
 
-    totalCesItems = len(snomedConceptAnnotations)
-    print(len(snomedConceptAnnotations))
-    return render_template('webpages/part1.html', title='First Part Study', answered=totalAnswered,
-                           concepts=snomedConceptAnnotations.to_dict('records'), items=totalCesItems, sources=sourcesLinks.to_dict('records'))
+    totalCesItems = len(snomed_concept_annotations)
+    print(len(snomed_concept_annotations))
+    return render_template('webpages/part1.html', title='First Part Study', answered=total_answered,
+                           concepts=snomed_concept_annotations.to_dict('records'), items=totalCesItems, sources=sourcesLinks.to_dict('records'))
 
 
 @bp.route('/part2', methods=('GET', 'POST'))
@@ -175,70 +172,90 @@ def part1():
 @login_required
 def part2():
     res = DtMngmnt()
-    res.setDirectory(0)
-    # Verify if the user already has answered the question
+    res.set_directory(0)
+    # user information
     username = g.user['username']
-    userFile = res.loadUserFile(username)
+    user_file = res.load_user_file(username)
     # current evaluation
-    snmdIdentifier = userFile['p2']['current']
-    totalAnswered = userFile['p2']['total']
+    snmd_identifier = user_file['p2']['current']
+    total_p1 = user_file['p1']['total']
+    total_answers_p2 = user_file['p2']['total']
 
     if request.method == 'POST':
         error = None
-        answerValue = request.form.get('answer')
+        snmd_identifier = request.form['snmdIdentifier']
     #
+        # If no answers in Part 1, cannot start Part 2
+        if total_p1 == 0:
+            error = "Please complete Part 1 of the study."
+
         if error is None:
-            #save the results
+            # save the results
     #         patientID =request.form.get('patient')
     #         value = res.getButtonLabel(answerValue)
     #         rowValues = [username,'Q1',patientID,answerValue, value]
     #         res.appendRowsCSVresultsFile(username, rowValues)
             #update session values
-            userFile['p2']['total'] = 1+userFile['p2']['total']
-            totalAnswered = userFile['p2']['total']
-            userFile['p2']['current'] = snmdIdentifier
-            res.updateUserFile(username, userFile)
+            user_file['p2']['total'] = 1+user_file['p2']['total']
+            total_answers_p2 = user_file['p2']['total']
+            user_file['p2']['current'] = snmd_identifier
+            res.update_user_file(username, user_file)
         else:
             flash(error)
-    #
-    # #returns a random list of IDs
-    # sampleList = res.returnRandomSample()
-    # sampleNumber=len(sampleList)
-    #
-    # #query the number
-    # if userFile['q1']['total'] == 0:
-    #     left = sampleNumber
-    #     patientID = sampleList[0]
-    # elif userFile['q1']['total'] == sampleNumber:
-    #     #the user has reached the max sample number
-    #     return redirect(url_for('index'))
-    # else:
-    #     left = sampleNumber - userFile['q1']['total']
-    #     patientID=userFile['q1']['current']
-    #     #find the index of the actual value and select the next ID
-    #     j = 0
-    #     for i in sampleList:
-    #         i = i.replace(".json","")
-    #         j+=1
-    #         if i == patientID:
-    #             break
-    #     patientID=sampleList[j]
-    #
-    # patient = res.loadSampleFile(patientID)
-    #
-    # patientID = patientID.replace(".json","")
-    # patientDetails = patient['patient']['details']
-    #
-    # patientRelevantInf = patient['patient']['completeData']
-    # patientDistinctDatapoints = res.getDistinctDatapoints(patient['patient']['completeData'])
-    ruleOneList = {}
-    ruleFourList = {}
-    if totalAnswered == 0:
-        snmdIdentifier = -1
 
-    ruleFourList = res.getPropagatedConcepts(snmdIdentifier, '2021-07-12_04PropAttributesRules.csv').to_dict('records')
+    if total_answers_p2 == 0:
+        # TODO: read answers from Part 1
+        #  use these answers for study 2 and
+        #  extract the snmdIdentifiers from Part 1
+        #  save the list
+        snmd_identifier = -1
+        # total_list_answers = res.extract_answers(user_file['id'])
+        res.extract_answers(user_file['id'])
 
-    return render_template('webpages/part2.html', title='Part 2', rule1=ruleOneList, rule4=ruleFourList)
+    # find next item on the list
+    next_item_row = res.next_item_sample_p2(user_file['id'], snmd_identifier)
+
+    # print(nextItemRow)
+    if next_item_row is not None:
+        list_ces = res.next_item_all_ces_p2(user_file['id'], next_item_row['snomedIdentifier']).to_dict('records')
+        next_snmd_identifier = next_item_row['snomedIdentifier']
+        # print(nextSnmdIdentifier)
+        list_rules = res.return_list_rules_item(next_snmd_identifier)
+        print(list_rules)
+        rule_one_list = {}
+        rule_two_list = {}
+        rule_three_list = {}
+        rule_four_list = {}
+        rule_five_list = {}
+        rule_six_list = {}
+        for rule in list_rules:
+            file_name = ""
+            if rule == 1:
+                file_name = '2021-07-12_01DescendantsNoEffectConcepts.csv'
+                rule_one_list = res.get_propagated_concepts(next_snmd_identifier, file_name, rule).to_dict('records')
+            elif rule == 2:
+                file_name = '2021-07-01_02DirectChildrenConcepts.csv'
+                rule_two_list = res.get_propagated_concepts(next_snmd_identifier, file_name, rule).to_dict('records')
+            elif rule == 3:
+                file_name = '2021-11-19_03RulesMoreOneAtt.csv'
+                rule_three_list = res.get_propagated_concepts(next_snmd_identifier, file_name, rule).to_dict('records')
+            elif rule == 4:
+                file_name = '2021-11-19_04RulesOneAtt.csv'
+                rule_four_list = res.get_propagated_concepts(next_snmd_identifier, file_name, rule).to_dict('records')
+            elif rule == 5:
+                file_name = '2021-11-25_05NoAttributes.csv'
+                rule_five_list = res.get_propagated_concepts(next_snmd_identifier, file_name, rule).to_dict('records')
+            elif rule == 6:
+                file_name = '2021-11-22_06ParentsOnly.csv'
+                rule_six_list = res.get_propagated_concepts(next_snmd_identifier, file_name, rule).to_dict('records')
+
+        # TODO
+        # show all the correct CES
+        return render_template('webpages/part2.html', title='Part 2', parent=next_item_row, cess=list_ces,
+                               rule1=rule_one_list, rule2=rule_two_list, rule3=rule_three_list, rule4=rule_four_list,
+                               rule5=rule_five_list, rule6=rule_six_list)
+    else:
+        return redirect(url_for('index'))
     # ,sample=sample, total=sampleNumber,
     # left=left, distinctDatapoints=patientDistinctDatapoints,
     # title='Question 1', details=patientDetails,relevant=patientRelevantInf)

@@ -17,31 +17,32 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 def register():
     if request.method == 'POST':
         username = request.form['username']
-        #password = request.form['password']
-        #db = get_db()
+        # password = request.form['password']
+        # db = get_db()
         
-        #verify if already register, a file with the name in the folder
-        #eg: amorales
+        # verify if already register, a file with the name in the folder
+        # eg: amorales
         res = DtMngmnt()
-        res.setDirectory(0)
-        userExist = res.verifyUser(username)
+        res.set_directory(0)
+        user_exist = res.verify_user(username)
         error = None
 
         if not username:
             error = 'Username is required.'
-        #validate that the username is not already in the DB
-        elif userExist:
+        # validate that the username is not already in the DB
+        elif user_exist:
             error = 'User "{}" is already registered.'.format(username)
 
         if error is None:
-            #create file with user's name
-            res.createUserFile(username)
+            # create file with user's name
+            res.create_user_file(username)
             # res.createCSVresultsFile(username)
             return redirect(url_for('auth.login'))
         
         flash(error)
 
     return render_template('auth/register.html')
+
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
@@ -50,23 +51,22 @@ def login():
 
         error = None
 
-        #validate username is already in the files
+        # validate username is already in the files
         res = DtMngmnt()
-        res.setDirectory(0)
-        exist = res.verifyUser(username)
+        res.set_directory(0)
+        exist = res.verify_user(username)
         
         if not exist:
             error = 'Incorrect username.'
         
         if error is None:
-            userFile = res.loadUserFile(username)
+            user_file = res.load_user_file(username)
             session.clear()
-            session['user_id'] = userFile['id']
+            session['user_id'] = user_file['id']
             session['username'] = username
             
-            #in case is admin
-            
-            if res.verifyAdmin(userFile):
+            # in case is admin
+            if res.verify_admin(user_file):
                 session['admin'] = True
             else:
                 session['admin'] = False
@@ -77,15 +77,16 @@ def login():
 
     return render_template('auth/login.html')
 
+
 @bp.before_app_request
 def load_logged_in_user():
     res = DtMngmnt()
-    res.setDirectory(0)
+    res.set_directory(0)
     user_id = session.get('user_id')
     if user_id is None:
         g.user = None
     else:
-        g.user = res.loadUserFile(session.get('username'))
+        g.user = res.load_user_file(session.get('username'))
 
 
 @bp.route('/logout')

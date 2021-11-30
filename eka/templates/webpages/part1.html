@@ -88,7 +88,7 @@
 					<table id="table_details" class="table table-striped">
 						<thead>
 							<tr>
-								<th>Info </th>
+<!--								<th>Info </th>-->
 								<th>Condition Evolution Statement</th>
 <!--								<th>Sentence</th>-->
 								<th>Incorrect</th>
@@ -101,29 +101,29 @@
 						<tbody>
 							{% for dataCell in concepts %}
 							<tr>
-								<td>
-<!--									<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#healthDetailsModal">More info</button>-->
-									<a data-toggle="modal" href="#healthDetailsModal" data-id="{{dataCell['index']}}" data-source="{{dataCell['source']}}" data-sentence="{{dataCell['sentence']}}">More info</a>
-								</td>
+<!--								<td>-->
+<!--&lt;!&ndash;									<button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#healthDetailsModal">More info</button>&ndash;&gt;-->
+<!--									<a data-toggle="modal" href="#healthDetailsModal" data-id="{{dataCell['index']}}" data-source="{{dataCell['source']}}" data-sentence="{{dataCell['sentence']}}">More info</a>-->
+<!--								</td>-->
 								{% if dataCell['predictedTag'] %}
 								   <td> {{ dataCell['predictedTag'] }}</td>
 								{% else %}
 									<td> </td>
 								{% endif %}
 								<td>
-									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioI" value="incorrect">
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioI" value="5">
 								</td>
 								<td>
-									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioPI" value="pi" >
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioPI" value="4" >
 								</td>
 								<td>
-									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioNCNI" value="ncni" >
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioNCNI" value="3" >
 								</td>
 								<td>
-									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioPC" value="pc"><!--  data-bs-toggle="collapse" data-bs-target="#collapseImprove" aria-expanded="false" aria-controls="collapseImprove">!-->
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioPC" value="2"><!--  data-bs-toggle="collapse" data-bs-target="#collapseImprove" aria-expanded="false" aria-controls="collapseImprove">!-->
 								</td>
 								<td>
-									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioCorrect" value="correct">
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioCorrect" value="1">
 								</td>
 							</tr>
 							{% endfor %}
@@ -160,7 +160,7 @@
 <!--					<div  id="editCES" class="panel-body container-sm table-responsive">-->
 						<!-- Asking if possible to improve -->
 						<div class="row" id="editCES">
-							<div class="col-6 collapse multi-collapse show" id="collapseImprove">
+							<div class="col-12 collapse multi-collapse show" id="collapseImprove">
 								<h4> Can you help us improve this Condition Evolution Statement?</h4>
 								<div>
 <!--									<button type="button" class="btn btn-primary btn-lg" value="Y" id="buttonYes">Yes</button>-->
@@ -174,7 +174,7 @@
 						<div class="collapse multi-collapse show" id="collapseEditCES">
 							<div class="card">
 								<div class="card-header">
-									Edit Condition Evolution Statement
+									{{ concepts[0]['conditionName'] }}
 								</div>
 								<div class="card-body">
 									<div class="row input-group input-group-lg">
@@ -257,7 +257,7 @@
 											<div class="form-check">
 											  <input class="form-check-input" type="checkbox" id="noImprove" value="newCES">
 											  <label class="form-check-label" for="noImprove">
-												  Please check in case you CANNOT provide a new Condition Evolution Statement
+												  No, I can't think of a better CES
 											  </label>
 											</div>
 										</div>
@@ -279,6 +279,7 @@
 						<input type="hidden" id="errorValue" name="errorValue" value="">
 						<input type="hidden" id="improveAnswer" name="improveAnswer" value="newCES">
 						<input type="hidden" id="snmdIdentifier" name="snmdIdentifier" value="{{ concepts[0]['snomedIdentifier'] }}">
+						<input type="hidden" id="snmdConcept" name="snmdConcept" value="{{ concepts[0]['snomedConcept'] }}">
 					</div>
 				</div>
 			</form>
