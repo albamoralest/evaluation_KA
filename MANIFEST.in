@@ -1,0 +1,5 @@
+recursive-include eka/propagation *
+recursive-include eka/resources *
+recursive-include eka/templates *
+recursive-include eka/users *
+recursive-include eka/results *

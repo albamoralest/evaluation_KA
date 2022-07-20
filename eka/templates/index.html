@@ -11,8 +11,6 @@
 		<h4>
 		Thank you for participating in our study. 
 		</h4>
-		
-
 		<p>
 			This research study focuses on evaluating the accuracy of the information in a database, which was extracted
 			automatically from reliable public sources, such as the NHS England website. Your expertise will allow us to
@@ -30,7 +28,17 @@
 			<b> For Part 2,</b> present a series of health conditions and ask whether they progress in a similar way.
 		</p>
 	</div>
-
+	<div class="row">
+		<div class="col-sm-3">
+			<div class="panel panel-default ">
+				<div class="panel-body ">
+					<h3 class="panel-title">Participant's information</h3>
+					<p></p>
+					<a href="{{url_for('evaluation.info', title='Registration')}}" class="list-group-item list-group-item active">Registration</a>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="row">
 		<div class="col-sm-6">
 			<div class="panel panel-default ">
@@ -39,24 +47,19 @@
 				</div>
 				<div class="panel-body">
 					<div class="row">
-						<div class="col-sm-4">
-							<div class="list-group">
-<!--								<a href="{{url_for('evaluation.part1', title='Part 1')}}" class="list-group-item list-group-item active">Start study</a>-->
+						<div class="align-bottom col">
+							<div class="list-group ">
 								<a href="{{url_for('evaluation.part1', title='Part 1')}}" class="list-group-item list-group-item active">{{ labelp1 }}</a>
 							</div>
 						</div>
-<!--					</div>-->
-<!--					<div class="row">-->
-<!--						<div class="col-sm-2">-->
-<!--							<p class="text-start">Progress...</p>-->
-<!--						</div>-->
-						<div class="col-sm-8">
+
+						<div class="col">
 							<label for="divProgress" class="form-label">Progress...</label>
-							<div class="progress" style="height: 40px" id="divProgress">
-								<div class="progress-bar progress-bar-striped" role="progressbar" style="min-width: 2em;width: {{p1number}}%" aria-valuenow="{{p1number}}%" aria-valuemin="0" aria-valuemax="100" >
+							<div class="progress" id="divProgress"><!-- style="height: 30px" -->
+								<div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="min-width: 2em;width: {{p1number}}%" aria-valuenow="{{p1number}}%" aria-valuemin="0" aria-valuemax="100" >
 									<a href="{{url_for('evaluation.part1', title='Part 1')}}" class="list-group-item list-group-item active" role="button">
 										<b>
-										{{ p1number }} % objective completed</b>
+										{{ p1number }} % completed</b>
 									</a>
 								</div>
 							</div>
@@ -72,18 +75,18 @@
 				</div>
 				<div class="panel-body">
 				  <div class="row">
-						<div class="col-sm-4">
+						<div class="align-bottom col">
 							<div class="list-group">
 								<a href="{{url_for('evaluation.part2', sample=2)}}" class="list-group-item list-group-item active">{{ labelp2 }}</a>
 							</div>
 						</div>
-						<div class="col-sm-8">
+						<div class="col">
 							<label for="divProgress2" class="form-label">Progress...</label>
-							<div class="progress" style="height: 40px" id="divProgress2">
-								<div class="progress-bar" role="progressbar" style="width: {{p2number}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em;">
-									<a href="{{url_for('evaluation.part2', title='Part 2')}}" class="list-group-item list-group-item active">
+							<div class="progress" id="divProgress2">
+								<div class="progress-bar" role="progressbar" style="width: {{p2number}}%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+									<a href="{{ url_for('evaluation.part2', title='Part 2') }}" class="list-group-item list-group-item active">
 										<b>
-										{{ p2number }} % objective completed</b>
+										{{ p2number }} % completed</b>
 									</a>
 								</div>
 							</div>

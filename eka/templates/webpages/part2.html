@@ -10,31 +10,10 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-sm-6">
-					<div class="card h-100 bg-light mb-3">
+					<div class="card bg-light mb-3">
 						<div class="card-body bg-light mb-3">
-<!--							<h4>Scenario</h4>-->
-<!--							<p class="card-text">-->
-
-<!--							</p>-->
-<!--						</div>-->
-									<h4 class="card-title">Evaluation of similar health conditions</h4>
-						<p></p>
-    					<p class="card-text">Considering the health condition <b> {{ parent['snomedConcept'] }} </b> and its Condition Evolution Statement(s),</p>
-						<p class="card-text fw-bold">How do you agree with the following list of health conditions sharing the same Condition Evolution Statement (CES)
-							as <b>{{ parent['snomedConcept'] }}</b> ?</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="card h-100 bg-light mb-3">
-						<div class="card-body bg-light mb-3">
-							<h4><b>{{ parent['snomedConcept'] }}</b></h4>
+							<h4><b> {{ parent['snomedConcept'] }} ({{ parent['snomedIdentifier'] }})</b></h4>
 							<ul class="list-group list-group-flush bg-light mb-3">
-								<li class="list-group-item"><b>Snomed CT Concept</b>
-									{% if parent['snomedConcept'] %}
-									{{ parent['snomedConcept'] }} ({{ parent['snomedIdentifier'] }})
-									{% endif %}
-								</li>
 								<li class="list-group-item">
 									<b>Condition Evolution Statement(s) (CES): </b>
 									{% if cess %}
@@ -55,437 +34,90 @@
 						</div>
 					</div>
 				</div>
+				<div class="col-sm-6">
+					<div class="card bg-light mb-3">
+						<div class="card-body bg-light mb-3">
+							<h4><b>Attribute(s):</b></h4>
+							<ul class="list-group list-group-flush bg-light mb-3">
+								{% if attributes %}
+									{% for item in attributes %}
+								<li class="list-group-item font-weight-light">{{ item['att_type_term'] }} : {{ item['att_value_term'] }} </li>
+									{% endfor %}
+								{% else %}
+								<p>No attributes</p>
+								{% endif %}
+							</ul>
+							{% if parents %}
+							<h4><b>Direct Parent(s):</b></h4>
+							<ul class="list-group list-group-flush bg-light mb-3">
+								{% for item in parents %}
+								<li class="list-group-item font-weight-light">{{ item['term'] }} </li>
+								{% endfor %}
+							</ul>
+							{% endif %}
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
-<!--		<div class="panel-body">-->
-<!--			<div class="card">-->
-<!--				&lt;!&ndash; Card header &ndash;&gt;-->
-<!--				<div class="card-header" id="headingOne1">-->
-<!--					<a class="" data-target="#collapseOne1" data-toggle="collapse" href="#collapseOne1" role="button" aria-expanded="true" aria-controls="collapseOne1">-->
-<!--					<h5 class="mb-0">-->
-<!--					Collapsible Group Item #1-->
-<!--					</h5>-->
-<!--					</a>-->
-<!--				</div>-->
-<!--				&lt;!&ndash; Card body &ndash;&gt;-->
-<!--				<div class="card-collapse show" id="collapseOne1" >-->
-<!--					<div class="card card-body">-->
-<!--						Anim-->
-<!--					</div>-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
-
-
-
 		<div class="panel-body">
 			<form method="post" id="editCESform">
-<!--				<div class="panel-body">-->
-<!--				<h4>-->
-<!--					<p>Considering the health condition <b> {{ parent['snomedConcept'] }} </b> and its Condition Evolution Statement(s):-->
-<!--				</h4>-->
-<!--				<p></p>-->
-<!--				<div class="card">-->
-<!--					<div class="card-body">-->
-<!--						<h4 class="card-title">Evaluation of similar health conditions</h4>-->
-<!--						<p></p>-->
-<!--    					<p class="card-text">Considering the health condition <b> {{ parent['snomedConcept'] }} </b> and its Condition Evolution Statement(s) above,</p>-->
-<!--						<p class="card-text fw-bold">How do you agree with the following list of health conditions sharing the same Condition Evolution Statement (CES)-->
-<!--							as <b>{{ parent['snomedConcept'] }}</b> ?</p>-->
-<!--					</div>-->
-<!--				</div>-->
-				{% if rule0 %}
+				{% if rule1|length %}
 				<div class="card">
 					<div class="card-header">
-						Case A: Explanation
-					</div>
-
-				</div>
-				<p></p>
-				<div class="card">
-					<div class="card-header">
-						Case A: Explanation
+						<h5>
+						<p class="card-text bg-light">Considering the health condition <b> " {{ parent['snomedConcept'] }} "</b> and its Condition Evolution Statement(s):</p>
+						</h5>
+						<h4>
+							<p class="card-text fw-bold">How much do you agree with the following list of health conditions
+								<b class="fst-italic"><u> sharing </u></b> the same Condition Evolution Statement (CES)
+							as <b>{{ parent['snomedConcept'] }}</b> ?
+						</p>
+						</h4>
 					</div>
 					<div class="card-body">
-						<table class="table table-striped">
-							<thead>
-								<tr>
-									<th>Identifier</th>
-									<th>Condition Description </th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for dataCell in rule0 %}
-								<tr>
-									{% if dataCell['snmdIdentifier'] %}
-									   <td> {{ dataCell['snmdIdentifier'] }}</td>
-									{% else %}
-										<td> </td>
-									{% endif %}
-									{% if dataCell['snomedConcept'] %}
-									   <td> {{ dataCell['snomedConcept'] }}</td>
-									{% else %}
-										<td> </td>
-									{% endif %}
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
-					</div>
-				</div>
-				{% endif %}
-
-				{% if rule1 %}
-				<div class="card">
-					<div class="card-header">
-						<b>Case 1: </b>
-						<p class="text-break font-weight-light">Administrative type of SNOMED concepts, generally does not represent a health condition but
-							an administrative procedure.</p>
-					</div>
-					<div class="card-body">
-
-						<table class="table table-striped table-bordered" id="tableRule1">
-							<thead>
-								<tr>
-									<th>Identifier</th>
-									<th>Condition Description </th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for dataCell in rule1 %}
-								<tr>
-									{% if dataCell['snomedDesIdentifier'] %}
-									   <td> {{ dataCell['snomedDesIdentifier'] }}</td>
-									{% else %}
-										<td> </td>
-									{% endif %}
-									{% if dataCell['snomedDesConcept'] %}
-									   <td> {{ dataCell['snomedDesConcept'] }}</td>
-									{% else %}
-										<td> </td>
-									{% endif %}
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
-					</div>
-				</div>
-				{% endif %}
-
-				{% if rule2 %}
-				<p></p>
-				<table  class="table table-striped">
-					<thead>
-						<tr>
-							<th>Incorrect</th>
-							<th>Partially incorrect</th>
-							<th>Neither correct nor incorrect</th>
-							<th>Partially correct</th>
-							<th>Correct</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<input class="form-check-input" type="radio" name="inlineRadioOptionsRule0" id="inlineRadioI" value="incorrect">
-							</td>
-							<td>
-								<input class="form-check-input" type="radio" name="inlineRadioOptionsRule0" id="inlineRadioPI" value="pi" >
-							</td>
-							<td>
-								<input class="form-check-input" type="radio" name="inlineRadioOptionsRule0" id="inlineRadioNCNI" value="ncni" >
-							</td>
-							<td>
-								<input class="form-check-input" type="radio" name="inlineRadioOptionsRule0" id="inlineRadioPC" value="pc"><!--  data-bs-toggle="collapse" data-bs-target="#collapseImprove" aria-expanded="false" aria-controls="collapseImprove">!-->
-							</td>
-							<td>
-								<input class="form-check-input" type="radio" name="inlineRadioOptionsRule0" id="inlineRadioCorrect" value="correct">
-							</td>
-						</tr>
-					</tbody>
-				</table>
-
-				<div class="card">
-					<div class="card-header">
-						<b>Case 2: Immediate descendants</b>
-						<p class="text-break font-weight-light">The list of SNOMED concepts directly linked to a given concept.</p>
-					</div>
-					<div class="card-body">
-						<p>How do you agree with the following list of health conditions sharing the same Condition Evolution Statement
-							as the concept <b>{{ parent['snomedConcept'] }}</b> ?</p>
-						<div class="controlChecks text-right">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0">
-								<label class="form-check-label" for="inlineRadio1">Incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1">
-								<label class="form-check-label" for="inlineRadio2">Partially incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="2">
-								<label class="form-check-label" for="inlineRadio3">Neither correct nor incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="3">
-								<label class="form-check-label" for="inlineRadio2">Partially correct</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="4">
-								<label class="form-check-label" for="inlineRadio1">Correct</label>
-							</div>
-						</div>
-						<p></p>
 						<div class="row">
 							<p></p>
-							<table class="table table-striped table-bordered" id="tableRule2">
-							<thead>
-								<tr>
-									<th>Identifier</th>
-									<th>Condition Description </th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for dataCell in rule2 %}
-								<tr>
-									{% if dataCell['snomedChlIdentifier'] %}
-									   <td> {{ dataCell['snomedChlIdentifier'] }}</td>
-									{% else %}
-										<td> </td>
-									{% endif %}
-									{% if dataCell['snomedChlConcept'] %}
-									   <td> {{ dataCell['snomedChlConcept'] }}</td>
-									{% else %}
-										<td> </td>
-									{% endif %}
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
-						</div>
-					</div>
-				</div>
-				{% endif %}
-
-				<p></p>
-				{% if rule3|length %}
-				<p></p>
-				<div class="card">
-					<div class="card-header">
-						<b>Case 3: Health conditions that share two or more similar attributes</b>
-						<p class="text-break font-weight-light">Description: "Select any concept(*) Where listOfAttributes{AttA=ValueA, AttB=ValueB,
-							AttC=ValueC} similar to main concept"  </p>
-					</div>
-					<div class="card-body">
-						<p>How do you agree with the following list of health conditions sharing the same Condition Evolution Statement
-							as the concept <b>{{ parent['snomedConcept'] }}</b> ?</p>
-						<div class="controlChecks text-right">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0">
-								<label class="form-check-label" for="inlineRadio1">Incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1">
-								<label class="form-check-label" for="inlineRadio2">Partially incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="2">
-								<label class="form-check-label" for="inlineRadio3">Neither correct nor incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="3">
-								<label class="form-check-label" for="inlineRadio2">Partially correct</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="4">
-								<label class="form-check-label" for="inlineRadio1">Correct</label>
-							</div>
-						</div>
-						<p></p>
-						<div class="row">
-							<p></p>
-							<table class="table table-striped table-bordered" id="tableRule3">
+							<div>
+							<table class="table table-striped table-bordered table-sm" id="tableRule1">
 								<thead>
 									<tr>
-										<th>Identifier</th>
-										<th>Condition Description </th>
+										<th>Condition Description</th>
+										<th class="text-center"> Incorrect <br><input type="radio" name="cb" id="cb1"></th>
+										<th class="text-center"> Partially Incorrect <br><input type="radio" name="cb" id="cb2"></th>
+										<th class="text-center"> I do not know <br><input type="radio" name="cb" id="cb3"></th>
+										<th class="text-center"> Partially Correct <br><input type="radio" name="cb" id="cb4"></th>
+										<th class="text-center"> Correct <br><input type="radio" name="cb" id="cb5"></th>
 									</tr>
 								</thead>
 								<tbody>
-									{% for dataCell in rule3 %}
+									{% for rule in list_rules %}
 									<tr>
-										{% if dataCell['descendantId'] %}
-										   <td> {{ dataCell['descendantId'] }}</td>
-										{% else %}
-											<td> </td>
-										{% endif %}
-										{% if dataCell['descendantConcept'] %}
-										   <td> {{ dataCell['descendantConcept'] }}</td>
-										{% else %}
-											<td> </td>
-										{% endif %}
+										<td colspan="6" class="fst-italic">
+											Group {{ rule }}: {{ list_rules[rule] }}
+										</td>
 									</tr>
+										{% for dataCell in rule1 %}
+											{% if rule == dataCell['rule'] %}
+									<tr>
+										{% if dataCell['descendantConcept'] %}
+									   	<td> {{ dataCell['descendantConcept'] }}</td>
+										{% else %}
+										<td> </td>
+										{% endif %}
+										<td class="text-center"><input type="radio" name="cb{{dataCell['index']}}" id="cba" value="5,{{ dataCell['rule'] }},{{ dataCell['descendantId'] }}"></td>
+										<td class="text-center"><input type="radio" name="cb{{dataCell['index']}}" id="cbb" value="4,{{ dataCell['rule'] }},{{ dataCell['descendantId'] }}"></td>
+										<td class="text-center"><input type="radio" name="cb{{dataCell['index']}}" id="cbc" value="3,{{ dataCell['rule'] }},{{ dataCell['descendantId'] }}"></td>
+										<td class="text-center"><input type="radio" name="cb{{dataCell['index']}}" id="cbd" value="2,{{ dataCell['rule'] }},{{ dataCell['descendantId'] }}"></td>
+										<td class="text-center"><input type="radio" name="cb{{dataCell['index']}}" id="cbe" value="1,{{ dataCell['rule'] }},{{ dataCell['descendantId'] }}"></td>
+									</tr>
+											{% endif %}
+										{% endfor %}
 									{% endfor %}
 								</tbody>
 							</table>
-						</div>
-					</div>
-				</div>
-				{% endif %}
-
-				{% if rule4|length %}
-				<p></p>
-				<div class="card">
-					<div class="card-header">
-						<b>Case 4: A health condition that shares a similar attribute</b>
-						<p class="text-break font-weight-light">Description: "Select a concept or directly descendants Where anAttribute{AttA=ValueA}
-							similar to main concept"  </p>
-					</div>
-					<div class="card-body">
-<!--						<p class="card-text">How do you agree with the following list of health conditions sharing the same Condition Evolution Statement-->
-<!--							as the concept <b>{{ parent['snomedConcept'] }}</b> ?</p>-->
-						<div class="controlChecks text-right">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0">
-								<label class="form-check-label" for="inlineRadio1">Incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1">
-								<label class="form-check-label" for="inlineRadio2">Partially incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="2">
-								<label class="form-check-label" for="inlineRadio3">Neither correct nor incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="3">
-								<label class="form-check-label" for="inlineRadio2">Partially correct</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="4">
-								<label class="form-check-label" for="inlineRadio1">Correct</label>
-							</div>
-						</div>
-						<p></p>
-					</div>
-					<div class="card-body">
-						<p></p>
-						<table class="table table-sm table-bordered table-striped" id="tableRule4">
-							<thead >
-								<tr>
-									<th>Identifier</th>
-									<th>Condition Description </th>
-<!--									<th>Condition Evolution Statement</th>-->
-								</tr>
-							</thead>
-							<tbody>
-								{% for dataCell in rule4 %}
-								<tr>
-									{% if dataCell['descendantId'] %}
-									   <td> {{ dataCell['descendantId'] }}</td>
-									{% else %}
-										<td> </td>
-									{% endif %}
-									{% if dataCell['descendantConcept'] %}
-									   <td> {{ dataCell['descendantConcept'] }}</td>
-									{% else %}
-										<td> </td>
-									{% endif %}
-<!--										{% if dataCell['predictedTag'] %}-->
-<!--										   <td> {{ dataCell['predictedTag'] }}</td>-->
-<!--										{% else %}-->
-<!--										<td> </td>-->
-<!--										{% endif %}-->
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
-					</div>
-				</div>
-<!--				</div>-->
-				{% else %}
-<!--						<br><strong> No health condition to validate  </strong>-->
-				{% endif %}
-
-				{% if rule5|length %}
-				<p></p>
-				<div class="card">
-					<div class="card-header">
-						<b>Case 5: A health condition that shares the same parents or descendants with similar attributes</b>
-						<p class="text-break font-weight-light">Description: "Select all concepts that share parentsDescendants{parentA, parentB} or
-							conceptDescendants Where attributes{AttA=ValueA, AttB=ValueB} similar to main concept"  </p>
-					</div>
-					<div class="card-body">
-<!--						<p>How do you agree with the following list of health conditions sharing the same Condition Evolution Statement-->
-<!--						as the concept <b>{{ parent['snomedConcept'] }}</b> ?</p>-->
-<!--						<div class="controlChecks text-right">-->
-<!--							<div class="form-check form-check-inline">-->
-<!--								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0">-->
-<!--								<label class="form-check-label" for="inlineRadio1">Incorrect</label>-->
-<!--							</div>-->
-<!--							<div class="form-check form-check-inline">-->
-<!--								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1">-->
-<!--								<label class="form-check-label" for="inlineRadio2">Partially incorrect</label>-->
-<!--							</div>-->
-<!--							<div class="form-check form-check-inline">-->
-<!--								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="2">-->
-<!--								<label class="form-check-label" for="inlineRadio3">Neither correct nor incorrect</label>-->
-<!--							</div>-->
-<!--							<div class="form-check form-check-inline">-->
-<!--								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="3">-->
-<!--								<label class="form-check-label" for="inlineRadio2">Partially correct</label>-->
-<!--							</div>-->
-<!--							<div class="form-check form-check-inline">-->
-<!--								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="4">-->
-<!--								<label class="form-check-label" for="inlineRadio1">Correct</label>-->
-<!--							</div>-->
-<!--						</div>-->
-						<p></p>
-						<div class="row">
-							<p></p>
-							<table class="table table-striped table-bordered" id="tableRule5" data-checkbox-header="true">
-								<thead>
-									<tr>
-										<th>Identifier</th>
-										<th>Condition Description </th>
-										<th class="text-center"> Incorrect <input type="checkbox"></th>
-										<th class="text-center"> Partially Incorrect <input type="checkbox"></th>
-										<th class="text-center"> I do not know <input type="checkbox"></th>
-										<th class="text-center"> Partially Correct <input type="checkbox"></th>
-										<th class="text-center"> Correct <input type="checkbox"></th>
-
-<!--										<th>Condition Evolution Statement</th>-->
-<!--										<th scope="col" data-field="State" data-checkbox="true" id="tableDefaultCheck" data-show-select-title="true">Validate</th>-->
-
-									</tr>
-								</thead>
-								<tbody>
-									{% for dataCell in rule5 %}
-									<tr>
-										{% if dataCell['descendantId'] %}
-										   <td> {{ dataCell['descendantId'] }}</td>
-										{% else %}
-											<td> </td>
-										{% endif %}
-										{% if dataCell['descendantConcept'] %}
-										   <td> {{ dataCell['descendantConcept'] }}</td>
-										{% else %}
-											<td> </td>
-										{% endif %}
-	<!--										{% if dataCell['predictedTag'] %}-->
-	<!--										   <td> {{ dataCell['predictedTag'] }}</td>-->
-	<!--										{% else %}-->
-											<td class="text-center"><input type="checkbox"></td>
-	<!--										{% endif %}-->
-											<td class="text-center"><input type="checkbox"></td>
-											<td class="text-center"><input type="checkbox"></td>
-											<td class="text-center"><input type="checkbox"></td>
-											<td class="text-center"><input type="checkbox"></td>
-									</tr>
-									{% endfor %}
-								</tbody>
-							</table>
+								</div>
 						</div>
 					</div>
 				</div>
@@ -493,79 +125,6 @@
 <!--						<br><strong> No health condition to validate  </strong>-->
 				{% endif %}
 
-				{% if rule6|length %}
-				<p></p>
-				<div class="card">
-					<div class="card-header">
-						<b>Case 6: A health condition that shares the same set of parents (more than one parent)</b>
-						<p class="text-break">Description: "Select all concepts that share parents{parentA, parentB}"  </p>
-					</div>
-					<div class="card-body">
-						<p>How do you agree with the following list of health conditions sharing the same Condition Evolution Statement
-							as the concept <b>{{ parent['snomedConcept'] }}</b> ?</p>
-						<div class="controlChecks text-right">
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="0">
-								<label class="form-check-label" for="inlineRadio1">Incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="1">
-								<label class="form-check-label" for="inlineRadio2">Partially incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="2">
-								<label class="form-check-label" for="inlineRadio3">Neither correct nor incorrect</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="3">
-								<label class="form-check-label" for="inlineRadio2">Partially correct</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="4">
-								<label class="form-check-label" for="inlineRadio1">Correct</label>
-							</div>
-						</div>
-						<p></p>
-						<div class="row">
-							<table class="table table-striped table-bordered" id="tableRule6">
-							<thead>
-								<tr>
-									<th>Identifier</th>
-									<th>Condition Description </th>
-									<th class="text-center"><input type="checkbox">Correct</th>
-									<th>Condition Evolution Statement</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for dataCell in rule6 %}
-								<tr>
-									{% if dataCell['descendantId'] %}
-									   <td> {{ dataCell['descendantId'] }}</td>
-									{% else %}
-										<td> </td>
-									{% endif %}
-									{% if dataCell['descendantConcept'] %}
-									   <td> {{ dataCell['descendantConcept'] }}</td>
-									{% else %}
-										<td> </td>
-									{% endif %}
-<!--										{% if dataCell['predictedTag'] %}-->
-<!--										   <td> {{ dataCell['predictedTag'] }}</td>-->
-<!--										{% else %}-->
-										<td class="text-center"><input type="checkbox"></td>
-<!--										{% endif %}-->
-										<td></td>
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
-						</div>
-					</div>
-				</div>
-				{% else %}
-<!--						<br><strong> No health condition to validate  </strong>-->
-				{% endif %}
-<!--				</div>-->
 			<div id="NextButton" class="panel-body container-sm table-responsive">
 				<div class="row justify-content-end">
 					<div class="d-grid gap-2 col-3 collapse multi-collapse in" id="collapseNext">
@@ -575,6 +134,7 @@
 				</div>
 				<p></p>
 				<input type="hidden" id="snmdIdentifier" name="snmdIdentifier" value="{{ parent['snomedIdentifier'] }}">
+				<input type="hidden" id="total_rows" name="total_rows" value="{{ total_rows }}">
 			</div>
 		</form>
 		</div>
@@ -586,52 +146,51 @@
 {% block additional_scripts %}
 <script type="text/javascript">
 	$(document).ready(function() {
-		//$('.collapse').collapse(show);
-		/*$('input[type="checkbox"]').click(function() {
-              if($(this).is(":checked")) {
-                alert("Checkbox is checked.");
-              }
-              else if($(this).is(":not(:checked)")) {
-                alert("Checkbox is unchecked.");
-              }
-            });*/
+		/*$('#tableRule1').DataTable( {
+			"lengthChange":   false,
+			"paging": false
+		} );*/
+		$('[id^="cb1"]').on('change', function(){
+			var checked = $(this).prop('checked');
+			var index = $(this).parent().index();
 
-		$('#tableRule1').DataTable( {
-			"pagingType": "full_numbers",
-			"lengthChange": false,
-			"pageLength": 5,
-			"order": [[ 0, 'asc' ],]
-		} );
-		$('#tableRule2').DataTable( {
-			"pagingType": "full_numbers",
-			"lengthChange": false,
-			"pageLength": 5,
-			"order": [[ 0, 'asc' ],]
-		} );
-		$('#tableRule3').DataTable( {
-			"pagingType": "full_numbers",
-			"lengthChange": false,
-			"pageLength": 5,
-			"order": [[ 0, 'asc' ],]
-		} );
-		$('#tableRule4').DataTable( {
-			"pagingType": "full_numbers",
-			"lengthChange": false,
-			"pageLength": 5,
-			"order": [[ 0, 'asc' ],]
-		} );
-		$('#tableRule5').DataTable( {
-			"pagingType": "full_numbers",
-			"lengthChange": false,
-			"pageLength": 5,
-			"order": [[ 0, 'asc' ],]
-		} );
-		$('#tableRule6').DataTable( {
-			"pagingType": "full_numbers",
-			"lengthChange": false,
-			"pageLength": 5,
-			"order": [[ 0, 'asc' ],]
-		} );
-	});
+			$('tr').each(function(i, val){
+				$(val).children().eq(index).children('input[type=radio]').prop('checked', checked);
+			});
+		});
+		$('[id^="cb2"]').on('change', function(){
+			var checked = $(this).prop('checked');
+			var index = $(this).parent().index();
+
+			$('tr').each(function(i, val){
+				$(val).children().eq(index).children('input[type=radio]').prop('checked', checked);
+			});
+		});
+		$('[id^="cb3"]').on('change', function(){
+			var checked = $(this).prop('checked');
+			var index = $(this).parent().index();
+
+			$('tr').each(function(i, val){
+				$(val).children().eq(index).children('input[type=radio]').prop('checked', checked);
+			});
+		});
+		$('[id^="cb4"]').on('change', function(){
+			var checked = $(this).prop('checked');
+			var index = $(this).parent().index();
+
+			$('tr').each(function(i, val){
+				$(val).children().eq(index).children('input[type=radio]').prop('checked', checked);
+			});
+		});
+		$('[id^="cb5"]').on('change', function(){
+			var checked = $(this).prop('checked');
+			var index = $(this).parent().index();
+
+			$('tr').each(function(i, val){
+				$(val).children().eq(index).children('input[type=radio]').prop('checked', checked);
+			});
+		});
+	} );
+
 </script>
 {% endblock %}

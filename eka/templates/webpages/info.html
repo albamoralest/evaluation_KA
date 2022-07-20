@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% import 'bootstrap/utils.html' as utils %}
+
+{% block app_content %}
+<h2>  </h2>
+    
+<br>
+<div class="container">
+	<div class="panel panel-default ">
+		<div class="panel-body">
+			<form role="navigate" method="post" aria-label="Right Align" id="editCESform">
+				<div class="panel-body justify-content-md-left col-4">
+					<p>
+						<h4>
+							<b>Please register the following information:</b>
+						</h4>
+					</p>
+					<div class="form-group">
+						<label for="role">Current role/occupation</label>
+						<input type="text" class="form-control" id="role" name="role"  placeholder="Enter current role">
+					</div>
+					<div class="form-group">
+						<label for="specialization" class="form-label">Area of Specialization</label>
+						<input type="text" class="form-control" id="specialization" name="specialization" placeholder="Specialization">
+					</div>
+
+					<!-- Collapse Next button to continue with annotations -->
+					<div id="SaveButton" class="panel-body container-sm">
+						<div class="row justify-content-end">
+							<div class="d-grid gap-2 col-3 collapse multi-collapse in" id="collapseNext">
+								<button type="submit" class="btn btn-primary btn-lg" value="next" name="next" id="buttonSave">Save</button>
+	<!--								<button class="btn btn-primary btn-lg" value="next" name="next" id="buttonNext" disabled>Next</button>-->
+							</div>
+						</div>
+						<p></p>
+	<!--						<input type="hidden" id="totalCES" name="totalCES" value="{{ items }}">-->
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block additional_scripts %}
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		$('#healthDetailsModal').on('show.bs.modal', function (event) {
+			console.log('MODAL');
+			var button = $(event.relatedTarget); // Button that triggered the modal
+			var recipient = button.data('id'); // Extract info from data-* attributes
+			var source = button.data('source');
+			var sentence = button.data('sentence');
+
+			var modal = $(this);
+			//modal.find('.modal-title').text('New message to ' + recipient);
+			modal.find('#lblSource').text(source);
+			modal.find('#lblSentence').text(sentence);
+		});
+
+		$(".form-check-input").click(function(){
+		//$("input:radio").click(function(){
+			console.log('button click');//output the description to the console
+			// if all checked then value = True, if at least one is not checked then false
+			var check = validateAllRadiosCheck();
+			//console.log(check);
+			if(check){
+				console.log("True");
+				// activate Next button
+				$("#buttonNext").removeAttr("disabled");
+				$('#buttonNext').removeClass('disabled');
+				// activate question to improve value
+				//$('#collapseImprove').addClass('collapse multi-collapse in');
+			}
+		});
+
+		$("#buttonNo").click(function(){
+			// enable the controls for Next
+			$("#buttonNext").removeAttr("disabled");
+			$('#buttonNext').removeClass('disabled');
+			$("#collapseEditCES").removeClass("collapse multi-collapse in");
+			$('#collapseEditCES').addClass('collapse multi-collapse');
+			$("#improveAnswer").removeAttr("value");
+			$("#improveAnswer").attr("value", "NO");
+		});
+
+		$("#buttonYes").click(function(){
+			// enable the controls to input a new CES value
+			$("#buttonNext").removeAttr("disabled");
+			$('#buttonNext').removeClass('disabled');
+			$('#collapseEditCES').addClass('collapse multi-collapse in');
+			$("#improveAnswer").removeAttr("value");
+			$("#improveAnswer").attr("value", "YES");
+		});
+
+		$("#buttonNext").click(function(){
+			// validate all radio input check
+			var check = validateAllRadiosCheck();
+			if(check){
+				$("#errorValue").removeAttr("value");
+				$("#errorValue").attr("value", "");
+				//$('#buttonNext').addClass('value');
+				//alert('One radio in each group is checked.');
+			}else{
+				$("#errorValue").removeAttr("value");
+				$("#errorValue").attr("value", "incompleteCheckBox");
+				//$('#buttonNext').addClass('value');
+				//alert('Please select one option in each question.');
+			}
+
+			// validate two digits are not zero at the same time
+			var valueSelected  = $("#improveAnswer").val();
+
+			// validate if participant can improve value or not numberValidation
+			if (valueSelected == "newCES"){
+				console.log("TRUE");
+				// validate that both input boxes contain a number and not other characters
+				// if true, the value is a number
+				var isNumber  = validateInputIsNumber();
+				if (isNumber == true){
+					// verify that the values are not zero
+					var checkDigits = validateZeroDigits();
+				}
+			}
+		});
+
+		$('input[type="checkbox"]').click(function() {
+			// If checked it means that the user cannot provide a new CES
+		  if($(this).prop("checked") == true) {
+			//alert("Checkbox is checked.");
+			$("#improveAnswer").removeAttr("value");
+			$("#improveAnswer").attr("value", "");
+			console.log("TRUE");
+		  }
+		  else if($(this).prop("checked") == false) {
+			//alert("Checkbox is unchecked.");
+			$("#improveAnswer").removeAttr("value");
+			$("#improveAnswer").attr("value", "newCES");
+			console.log("FALSE");
+		  }
+		});
+
+		$('#direction').find('option').click(function () {
+			var optionSelected = $(this);
+			var valueSelected  = optionSelected.val();
+			var textSelected   = optionSelected.text();
+
+			if (textSelected == "NONE" || textSelected == "PERMANENT"){
+				// disable from controls
+				$("#pace").prop("disabled", true);
+				$("#value-to").prop("disabled", true);
+				//$("#digitFrom1").prop("disabled", true);
+				$("#from-lb").prop("disabled", true);
+
+				// disable from controls
+				$("#value-from").prop("disabled", true);
+				//$("#digitTo1").prop("disabled", true);
+				$("#to-ub").prop("disabled", true);
+			}else{
+				// enable controls
+				$("#pace").prop("disabled", false);
+				$("#value-to").prop("disabled", false);
+				//$("#digitFrom1").prop("disabled", false);
+				$("#from-lb").prop("disabled", false);
+
+				// disable from controls
+				$("#value-from").prop("disabled", false);
+				//$("#digitTo1").prop("disabled", false);
+				$("#to-ub").prop("disabled", false);
+			}
+		});
+
+		// validate all radio button groups have one checked
+		function validateAllRadiosCheck() {
+			var check = true;
+			$("input:radio").each(function(){
+				var name = $(this).attr("name");
+				// if one radio button is not checked then return false
+				if($("input:radio[name="+name+"]:checked").length == 0){
+					check = false;
+				}
+			});
+			return check;
+		};
+
+		// validate two digits are not zero at the same time
+		function validateZeroDigits() {
+			var check = true;
+			var digitFrom = $("#value-from").val();
+			//var digitFrom1 = $("#digitFrom1").val();
+
+			var digitTo = $("#value-to").val();
+			//var digitTo1 = $("#digitTo1").val();
+
+			var direction = $("#direction").val();
+
+			if (direction != "PERMANENT" && direction != "NONE"){
+				if (digitFrom == "0" || digitFrom == ""){
+					check = false
+					$("#errorValue").removeAttr("value");
+					$("#errorValue").attr("value", "digitFromInvalid");
+				}else if (digitTo == "0" || digitTo == ""){
+					check = false
+					$("#errorValue").removeAttr("value");
+					$("#errorValue").attr("value", "digitToInvalid");
+				}
+			}
+			return check;
+		};
+
+		// this function is called to validate the input value is a number
+		function validateInputIsNumber() {
+			var inputTo = $("#value-to").val();
+			var inputFrom = $("#value-from").val();
+			var check = true;
+			if (isNaN(inputTo)) {
+				check = false
+				$("#errorValue").removeAttr("value");
+				$("#errorValue").attr("value", "needANumberTo");
+			}
+			if (isNaN(inputFrom)){
+				check = false;
+				$("#errorValue").removeAttr("value");
+				$("#errorValue").attr("value", "needANumberFrom");
+			}
+			return check;
+		};
+
+	});
+</script>
+{% endblock %}

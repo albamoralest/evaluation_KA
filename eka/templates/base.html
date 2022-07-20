@@ -29,7 +29,7 @@
 {% block navbar %}
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-                <a class="navbar-brand" href="{{ url_for('index') }}">Towards a database of health conditions’ evolution</a>
+                <a class="navbar-brand" href="{{ url_for('evaluation.index') }}">Towards a database of health conditions’ evolution</a>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
@@ -38,18 +38,16 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="navbar-nav">
                 	{% if g.user %}
-                		<li class="nav-item active"><a class="nav-link"  href="{{ url_for('index') }}">Home</a></li>
+                		<li class="nav-item active"><a class="nav-link" href="{{ url_for('evaluation.index') }}">Home</a></li>
                 		
                 		{% if g.user['admin'] %}
-                            <!-- <li><a href="{{ url_for('resu.resultsGEE') }}">Compare Results</a></li>
-                            <li><a href="{{ url_for('resu.listHR') }}">Review a HR</a></li> -->
                         {% endif %}
                 		
 				      	<li class="nav-item active"><a class="nav-link" href="{{ url_for('auth.logout') }}">Log Out</a>
 				      	<li class="nav-item active"><a class="nav-link" href="#">Welcome {{ g.user['username'] }} !</a></li>
 					{% else %}
-	                    <li class="nav-item active"><a class="nav-link" href="{{url_for('auth.login', sample=1)}}">Login</a></li>
-	                    <li class="nav-item active"><a class="nav-link" href="{{url_for('auth.register', sample=2)}}">Register</a></li>
+	                    <li class="nav-item active"><a class="nav-link" href="{{ url_for('auth.login', sample=1) }}">Login</a></li>
+	                    <li class="nav-item active"><a class="nav-link" href="{{ url_for('auth.register', sample=2) }}">Register</a></li>
                     {% endif %}
                 </ul>
                 

@@ -8,76 +8,86 @@
 <br>
 <div class="container">
 	<div class="panel panel-default ">
+		<form class="navbar-form navbar-left" role="navigate" method="post" aria-label="Right Align" id="editCESform">
 <!--		<div class="panel-heading">-->
 <!--		  <h3 class="panel-title"><b>Evaluation</b></h3>-->
 <!--		</div>-->
-		<div class="panel-body">
-<!--			<h4><b> Illustrative case: </b></h4>-->
-			<div class="row">
-			  <div class="col-sm-6">
-				<div class="card h-100">
-				  <div class="card-body">
-					  <h4>Scenario</h4>
-					<p class="card-text">
-					A fire emergency occurs in a University campus.
-					Among the persons in the building is Anne.
-					Her health record includes the condition displayed on the right.
-					Our Intelligent system needs to decide whether Anne requires special assistance during the emergency.
-					Therefore, it needs to decide whether the condition found in the health record may still be ongoing at the time of the emergency event.
-					The system is required to make a timely assessment based on the information in the health record only.
-					Luckily, the system can use a dataset of Condition Evolution Statements.
-					</p>
+			<div class="panel-body">
+	<!--			<h4><b> Illustrative case: </b></h4>-->
+				<div class="row">
+				  <div class="col-sm-6">
+					<div class="card h-100">
+					  <div class="card-body">
+						  <h4>Scenario</h4>
+						<p class="card-text">
+						A fire emergency occurs in a University campus.
+						Among the persons in the building is Anne.
+						Her health record includes the condition displayed on the right.
+						Our Intelligent system needs to decide whether Anne requires special assistance during the emergency.
+						Therefore, it needs to decide whether the condition found in the health record may still be ongoing at the time of the emergency event.
+						The system is required to make a timely assessment based on the information in the health record only.
+						Luckily, the system can use a dataset of Condition Evolution Statements.
+						</p>
+					  </div>
+					</div>
+				  </div>
+				  <div class="col-sm-6">
+					<div class="card h-100" >
+						<div class="card-body">
+							<h4><b>{{ concepts[0]['conditionName'] }}</b></h4>
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item"><b>Snomed CT Concept</b>
+									{% if concepts[0]['snomedConcept'] %}
+										{{ concepts[0]['snomedConcept'] }} ({{ concepts[0]['snomedIdentifier'] }})
+									{% endif %}
+								</li>
+
+								<li class="list-group-item">
+									Source(s):
+									{% if sources %}
+										<table class="table table-borderless">
+										  <tbody>
+											{% for sourceLink in sources %}
+											<tr>
+												<td>
+													{{ sourceLink['source'] }}
+												</td>
+											  <td>
+												  <a href="{{ sourceLink['url'] }}" target="_blank" rel="noopener noreferrer">{{ sourceLink['type'] }}</a>
+											  </td>
+											</tr>
+											{% endfor %}
+										  </tbody>
+										</table>
+									{% endif %}
+
+								</li>
+							</ul>
+							<div class="panel-body container-sm table-responsive">
+								<div class="row"><p><strong>How familiar are you with this concept?</strong></p></div>
+								<div class="row">
+									<div class="col">
+										<input class="" type="radio" name="confidence" id="inlineRadio1" value="1" checked>
+										<label class="" for="inlineRadio1">Unfamiliar</label>
+									</div>
+									<div class="col">
+										<input class="" type="radio" name="confidence" id="inlineRadio2" value="2">
+										<label class="" for="inlineRadio2">Partially familiar</label>
+									</div>
+									<div class="col">
+										<input class="" type="radio" name="confidence" id="inlineRadio3" value="3">
+										<label class="" for="inlineRadio3">Familiar</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				  </div>
 				</div>
-			  </div>
-			  <div class="col-sm-6">
-				<div class="card h-100" >
-					<div class="card-body">
-						<h4><b>{{ concepts[0]['conditionName'] }}</b></h4>
-						<ul class="list-group list-group-flush">
-<!--							<li class="list-group-item"><b>Health Condition Description: </b>-->
-<!--								{% if concepts[0]['conditionName'] %}-->
-<!--									{{ concepts[0]['conditionName'] }}-->
-<!--								{% endif %}-->
-<!--							</li>-->
-							<li class="list-group-item"><b>Snomed CT Concept</b>
-								{% if concepts[0]['snomedConcept'] %}
-									{{ concepts[0]['snomedConcept'] }} ({{ concepts[0]['snomedIdentifier'] }})
-								{% endif %}
-							</li>
-<!--							  <li class="list-group-item"><b>Identifier </b>-->
-<!--								  {% if concepts[0]['snomedIdentifier'] %}-->
-<!--									{{ concepts[0]['snomedIdentifier'] }}-->
-<!--								  {% endif %}-->
-<!--							</li>-->
-							<li class="list-group-item">
-								Source(s):
-								{% if sources %}
-									<table class="table table-borderless">
-									  <tbody>
-									  	{% for sourceLink in sources %}
-										<tr>
-											<td>
-												{{ sourceLink['source'] }}
-											</td>
-										  <td>
-											  <a href="{{ sourceLink['url'] }}" target="_blank" rel="noopener noreferrer">{{ sourceLink['type'] }}</a>
-										  </td>
-										</tr>
-									  	{% endfor %}
-									  </tbody>
-									</table>
-								{% endif %}
-							</li>
-						</ul>
-					</div>
-				</div>
-			  </div>
-			</div>
 
-<!--			<p><h4>Our system indicates this condition evolves as indicated in the following list.</h4></p>-->
-			<!-- Listing the CES and controls to indicate correctness-->
-			<form class="navbar-form navbar-left" role="navigate" method="post" aria-label="Right Align" id="editCESform">
+	<!--			<p><h4>Our system indicates this condition evolves as indicated in the following list.</h4></p>-->
+				<!-- Listing the CES and controls to indicate correctness-->
+
 				<div class="panel-body container-sm table-responsive">
 					<p>
 						<h4>
@@ -85,17 +95,15 @@
 						</h4>
 					</p>
 					{% if concepts %}
-					<table id="table_details" class="table table-striped">
+					<table id="table_details" class="table table-striped table-bordered table-sm">
 						<thead>
 							<tr>
-<!--								<th>Info </th>-->
 								<th>Condition Evolution Statement</th>
-<!--								<th>Sentence</th>-->
-								<th>Incorrect</th>
-								<th>Partially incorrect</th>
-								<th>Neither correct nor incorrect</th>
-								<th>Partially correct</th>
-								<th>Correct</th>
+								<th class="text-center">Incorrect <br><input type="radio" name="cb" id="cb1"></th>
+								<th class="text-center">Partially incorrect <br><input type="radio" name="cb" id="cb2"></th>
+								<th class="text-center">Neither correct nor incorrect <br><input type="radio" name="cb" id="cb3"></th>
+								<th class="text-center">Partially correct <br><input type="radio" name="cb" id="cb4"></th>
+								<th class="text-center">Correct <br><input type="radio" name="cb" id="cb5"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -110,19 +118,19 @@
 								{% else %}
 									<td> </td>
 								{% endif %}
-								<td>
+								<td class="text-center">
 									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioI" value="5">
 								</td>
-								<td>
+								<td class="text-center">
 									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioPI" value="4" >
 								</td>
-								<td>
-									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioNCNI" value="3" >
+								<td class="text-center">
+									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioNCNI" value="3" checked>
 								</td>
-								<td>
+								<td class="text-center">
 									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioPC" value="2"><!--  data-bs-toggle="collapse" data-bs-target="#collapseImprove" aria-expanded="false" aria-controls="collapseImprove">!-->
 								</td>
-								<td>
+								<td class="text-center">
 									<input class="form-check-input" type="radio" name="inlineRadioOptions{{dataCell['index']}}" id="inlineRadioCorrect" value="1">
 								</td>
 							</tr>
@@ -187,7 +195,7 @@
 												<option value="NONE">NONE</option>
 											</select>
 										</div>
-										<div class="col-md-2 p-1">
+										<div class="col-md-2">
 											<label class="input-group-text" for="pace">Pace: </label>
 											<select class="form-select form-select-lg" aria-label="Default select example" id="pace" name="pace">
 											  <option value="SLOWLY" selected>SLOWLY</option>
@@ -195,67 +203,47 @@
 											  <option value="FAST">FAST</option>
 											</select>
 										</div>
-										<div class="col-md-2 p-1">
-											<label class="input-group-text" for="value-from">From: </label>
-<!--											<div class="col-md-3 p-0">-->
-<!--												<select class="form-select form-select-lg" aria-label="Default select example" id="digitFrom0" name="digitFrom0">-->
-<!--													<option value="0" selected>0</option>-->
-<!--													<option value="1">1</option>-->
-<!--													<option value="2">2</option>-->
-<!--													<option value="3">3</option>-->
-<!--													<option value="4">4</option>-->
-<!--													<option value="5">5</option>-->
-<!--													<option value="6">6</option>-->
-<!--													<option value="7">7</option>-->
-<!--													<option value="8">8</option>-->
-<!--													<option value="9">9</option>-->
-<!--												</select>-->
-<!--											</div>-->
-											<div class="col-md-4 p-0">
-												<input type="text" class="form-control col-12" placeholder="0" id="value-from" name="value-from">
+										<div class="col-md-3">
+											<div class="row">
+												<label class="input-group-text" for="value-from">From: </label>
 											</div>
-											<div class="col-md-8 p-1">
-												<select class="form-select form-select-lg" aria-label="Default select example" id="from-lb" name="from-lb">
-													<option value="MINUTES" selected>MINUTES</option>
-													<option value="DAYS">DAYS</option>
-													<option value="WEEKS">WEEKS</option>
-													<option value="MONTHS">MONTHS</option>
-													<option value="YEARS">YEARS</option>
-												</select>
+											<div class="row">
+												<div class="col-4 p-0">
+													<input type="text" size="5" class="form-control" placeholder="0" id="value-from" name="value-from">
+												</div>
+												<div class="col-8 p-1">
+													<select class="form-select form-select-lg" aria-label="Default select example" id="from-lb" name="from-lb">
+														<option value="MINUTES" selected>MINUTES</option>
+														<option value="DAYS">DAYS</option>
+														<option value="WEEKS">WEEKS</option>
+														<option value="MONTHS">MONTHS</option>
+														<option value="YEARS">YEARS</option>
+													</select>
+												</div>
 											</div>
 										</div>
-										<div class="col-md-2 p-1">
-											<label class="input-group-text" for="value-to">To: </label>
-<!--											<div class="col-md-3 p-0">-->
-<!--												<select class="form-select form-select-lg" aria-label="Default select example" id="digitTo0" name="digitTo0">-->
-<!--													<option value="0" selected>0</option>-->
-<!--													<option value="1">1</option>-->
-<!--													<option value="2">2</option>-->
-<!--													<option value="3">3</option>-->
-<!--													<option value="4">4</option>-->
-<!--													<option value="5">5</option>-->
-<!--													<option value="6">6</option>-->
-<!--													<option value="7">7</option>-->
-<!--													<option value="8">8</option>-->
-<!--													<option value="9">9</option>-->
-<!--												</select>-->
-<!--											</div>-->
-											<div class="col-md-4 p-0">
-												<input type="text" class="form-control col-12" placeholder="0" id="value-to" name="value-to">
+										<div class="col-md-3">
+											<div class="row">
+												<label class="input-group-text" for="value-to">To: </label>
 											</div>
-											<div class="col-md-8 p-1">
-												<select class="form-select form-select-lg" aria-label="Default select example" id="to-ub" name="to-ub">
-													<option value="MINUTE" selected>MINUTES</option>
-													<option value="DAY">DAYS</option>
-													<option value="WEEK">WEEKS</option>
-													<option value="MONTH">MONTHS</option>
-													<option value="YEAR">YEARS</option>
-												</select>
+											<div class="row">
+												<div class="col-4 p-0">
+													<input type="text" size="5" class="form-control" placeholder="0" id="value-to" name="value-to">
+												</div>
+												<div class="col-8 p-1">
+													<select class="form-select form-select-lg" aria-label="Default select example" id="to-ub" name="to-ub">
+														<option value="MINUTE" selected>MINUTES</option>
+														<option value="DAY">DAYS</option>
+														<option value="WEEK">WEEKS</option>
+														<option value="MONTH">MONTHS</option>
+														<option value="YEAR">YEARS</option>
+													</select>
+												</div>
 											</div>
 										</div>
-										<div class="col-md-4">
+										<div class="col-md-2">
 											<div class="form-check">
-											  <input class="form-check-input" type="checkbox" id="noImprove" value="newCES">
+											  <input class="form-check-input" type="checkbox" id="noImprove" value="newCES" checked>
 											  <label class="form-check-label" for="noImprove">
 												  No, I can't think of a better CES
 											  </label>
@@ -270,20 +258,22 @@
 					<div id="NextButton" class="panel-body container-sm table-responsive">
 						<div class="row justify-content-end">
 							<div class="d-grid gap-2 col-3 collapse multi-collapse in" id="collapseNext">
-								<button type="submit" class="btn btn-primary btn-lg" value="next" name="next" id="buttonNext" disabled>Next</button>
+								<button type="submit" class="btn btn-primary btn-lg" value="next" name="next" id="buttonNext" >Next</button>
 <!--								<button class="btn btn-primary btn-lg" value="next" name="next" id="buttonNext" disabled>Next</button>-->
 							</div>
 						</div>
 						<p></p>
 						<input type="hidden" id="totalCES" name="totalCES" value="{{ items }}">
 						<input type="hidden" id="errorValue" name="errorValue" value="">
-						<input type="hidden" id="improveAnswer" name="improveAnswer" value="newCES">
+						<input type="hidden" id="improveAnswer" name="improveAnswer" value="">
 						<input type="hidden" id="snmdIdentifier" name="snmdIdentifier" value="{{ concepts[0]['snomedIdentifier'] }}">
 						<input type="hidden" id="snmdConcept" name="snmdConcept" value="{{ concepts[0]['snomedConcept'] }}">
+						<input type="hidden" id="confidenceResult" name="confidenceResult" value="1">
+
 					</div>
 				</div>
-			</form>
-		</div>
+			</div>
+		</form>
 	</div>
 </div>
 {% endblock %}
@@ -292,7 +282,7 @@
 
 	$(document).ready(function(){
 		$('#healthDetailsModal').on('show.bs.modal', function (event) {
-			console.log('MODAL');
+			//console.log('MODAL');
 			var button = $(event.relatedTarget); // Button that triggered the modal
 			var recipient = button.data('id'); // Extract info from data-* attributes
 			var source = button.data('source');
@@ -304,14 +294,28 @@
 			modal.find('#lblSentence').text(sentence);
 		});
 
+		$('input[type=radio][name=confidence]').change(function() {
+            if (this.value == 1) {
+                $("#confidenceResult").removeAttr("value");
+				$("#confidenceResult").attr("value", "1");
+            }else if (this.value == 2) {
+                $("#confidenceResult").removeAttr("value");
+				$("#confidenceResult").attr("value", "2");
+            }else if (this.value == 3) {
+                $("#confidenceResult").removeAttr("value");
+				$("#confidenceResult").attr("value", "3");
+            }
+            //console.log(this.value);
+        });
+
 		$(".form-check-input").click(function(){
 		//$("input:radio").click(function(){
-			console.log('button click');//output the description to the console
+			//console.log('button click');//output the description to the console
 			// if all checked then value = True, if at least one is not checked then false
 			var check = validateAllRadiosCheck();
 			//console.log(check);
 			if(check){
-				console.log("True");
+				//console.log("True");
 				// activate Next button
 				$("#buttonNext").removeAttr("disabled");
 				$('#buttonNext').removeClass('disabled');
@@ -376,13 +380,13 @@
 			//alert("Checkbox is checked.");
 			$("#improveAnswer").removeAttr("value");
 			$("#improveAnswer").attr("value", "");
-			console.log("TRUE");
+			//console.log("TRUE");
 		  }
 		  else if($(this).prop("checked") == false) {
 			//alert("Checkbox is unchecked.");
 			$("#improveAnswer").removeAttr("value");
 			$("#improveAnswer").attr("value", "newCES");
-			console.log("FALSE");
+			//console.log("FALSE");
 		  }
 		});
 
@@ -421,9 +425,12 @@
 			var check = true;
 			$("input:radio").each(function(){
 				var name = $(this).attr("name");
-				// if one radio button is not checked then return false
-				if($("input:radio[name="+name+"]:checked").length == 0){
-					check = false;
+				// excluding the header radio buttons
+				if (name != "cb"){
+					// if one radio button is not checked then return false
+					if($("input:radio[name="+name+"]:checked").length == 0){
+						check = false;
+					}
 				}
 			});
 			return check;
@@ -471,6 +478,51 @@
 			}
 			return check;
 		};
+
+		$('[id^="cb1"]').on('change', function(){
+			var checked = $(this).prop('checked');
+			var index = $(this).parent().index();
+
+			$('tr').each(function(i, val){
+				$(val).children().eq(index).children('input[type=radio]').prop('checked', checked);
+			});
+		});
+
+		$('[id^="cb2"]').on('change', function(){
+			var checked = $(this).prop('checked');
+			var index = $(this).parent().index();
+
+			$('tr').each(function(i, val){
+				$(val).children().eq(index).children('input[type=radio]').prop('checked', checked);
+			});
+		});
+
+		$('[id^="cb3"]').on('change', function(){
+			var checked = $(this).prop('checked');
+			var index = $(this).parent().index();
+
+			$('tr').each(function(i, val){
+				$(val).children().eq(index).children('input[type=radio]').prop('checked', checked);
+			});
+		});
+
+		$('[id^="cb4"]').on('change', function(){
+			var checked = $(this).prop('checked');
+			var index = $(this).parent().index();
+
+			$('tr').each(function(i, val){
+				$(val).children().eq(index).children('input[type=radio]').prop('checked', checked);
+			});
+		});
+
+		$('[id^="cb5"]').on('change', function(){
+			var checked = $(this).prop('checked');
+			var index = $(this).parent().index();
+
+			$('tr').each(function(i, val){
+				$(val).children().eq(index).children('input[type=radio]').prop('checked', checked);
+			});
+		});
 
 	});
 </script>

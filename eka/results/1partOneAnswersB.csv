@@ -1,0 +1,16 @@
+username,snomedIdentifier,snomedConcept,CES,userConfidence
+1,7199000,Tuberous sclerosis syndrome (disorder),IMPROVE SLOWLY FROM 2 MINUTES TO 2 WEEK,1
+1,363680008,Radiographic imaging procedure (procedure),NONE,3
+1,57019003,Verruca vulgaris (disorder),IMPROVE SLOWLY FROM 1 DAYS TO 4 DAY,2
+1,66999008,Hyperparathyroidism (disorder),PERMANENT,1
+1,229703009,Developmental verbal dyspraxia (disorder),PERMANENT,1
+1,60442001,Perforation of tympanic membrane (disorder),IMPROVE MODERATELY FROM 4 WEEKS TO 5 WEEK,3
+1,81000006,Pediculosis capitis (disorder),IMPROVE MODERATELY FROM 1 WEEKS TO 5 WEEK,3
+1,230558006,Hereditary liability to pressure palsies (disorder),DECLINE SLOWLY FROM 6 MONTHS TO 2 YEAR,2
+1,386831001,Endoscopy of stomach (procedure),IMPROVE MODERATELY FROM 5 MINUTES TO 2 WEEK,2
+1,46635009,Diabetes mellitus type 1 (disorder),IMPROVE SLOWLY FROM 2 MINUTES TO 3 MINUTE,1
+1,82782008,Toxic effect of ethyl alcohol (disorder),IMPROVE MODERATELY FROM 2 MINUTES TO 3 YEAR,1
+1,398114001,Ehlers-Danlos syndrome (disorder),NONE,3
+1,58150001,Fracture of clavicle (disorder),IMPROVE FAST FROM 2 MONTHS TO 3 MONTH,3
+1,229559001,Transcutaneous electrical nerve stimulation (regime/therapy),IMPROVE FAST FROM 1 DAYS TO 5 DAY,2
+1,126854002,Neoplasm of gallbladder (disorder),IMPROVE SLOWLY FROM 6 MONTHS TO 1 YEAR,1

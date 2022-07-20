@@ -1,0 +1,88 @@
+snomedIdentifier,snomedConcept,CES,userConfidence,evaluationAnswers,confidence
+363680008,Radiographic imaging procedure (procedure),NONE,3.0,0,
+57019003,Verruca vulgaris (disorder),IMPROVE SLOWLY FROM 1 DAYS TO 4 DAY,2.0,0,
+60442001,Perforation of tympanic membrane (disorder),IMPROVE MODERATELY FROM 4 WEEKS TO 5 WEEK,3.0,0,
+81000006,Pediculosis capitis (disorder),IMPROVE MODERATELY FROM 1 WEEKS TO 5 WEEK,3.0,0,
+230558006,Hereditary liability to pressure palsies (disorder),DECLINE SLOWLY FROM 6 MONTHS TO 2 YEAR,2.0,0,
+386831001,Endoscopy of stomach (procedure),IMPROVE MODERATELY FROM 5 MINUTES TO 2 WEEK,2.0,0,
+398114001,Ehlers-Danlos syndrome (disorder),NONE,3.0,0,
+58150001,Fracture of clavicle (disorder),IMPROVE FAST FROM 2 MONTHS TO 3 MONTH,3.0,0,
+57019003,Verruca vulgaris (disorder),IMPROVE SLOWLY FROM 6 MONTH TO 1 YEAR,2.0,2,0.006578947368421
+121276004,Antigen assay (procedure),NO EFFECT,,0,
+698247007,Cardiac arrhythmia (disorder),IMPROVE FAST FROM 5 MINUTE TO 1 DAY,2.0,2,0.0020725388601036
+43060002,Intravenous injection (procedure),NO EFFECT,,0,
+76334006,Immunotherapy (procedure),NO EFFECT,,0,
+418891003,Computed tomography of chest and abdomen (procedure),NO EFFECT,,0,
+384758001,Self-care interventions (procedure),NO EFFECT,,0,
+395142003,Allergy screening test (procedure),NO EFFECT,,0,
+58150001,Fracture of clavicle (disorder),IMPROVE MODERATELY FROM 8 DAY TO 2 MONTH,3.0,2,0.0048543689320388
+398114001,Ehlers-Danlos syndrome (disorder),DECLINE SLOWLY FROM 1 YEAR TO MORE YEAR,3.0,5,0.003690036900369
+65200003,Insertion of intrauterine contraceptive device (procedure),NO EFFECT,,0,
+408512008,Body mass index 40+ - severely obese (finding),NO EFFECT,,0,
+58150001,Fracture of clavicle (disorder),IMPROVE MODERATELY FROM 2 MONTH TO 6 MONTH,3.0,4,0.0025706940874035
+398114001,Ehlers-Danlos syndrome (disorder),PERMANENT,3.0,5,0.0023041474654377
+53950000,Respiratory therapy (procedure),NO EFFECT,,0,
+236931002,Methotrexate injection into tubal pregnancy (procedure),NO EFFECT,,0,
+284549007,Laceration of hand (disorder),NO EFFECT,,0,
+229703009,Developmental verbal dyspraxia (disorder),IMPROVE SLOWLY FROM 1 YEAR TO MORE YEAR,2.0,2,0.0037593984962406
+77477000,Computerized axial tomography (procedure),IMPROVE FAST FROM 5 MINUTE TO 1 DAY,3.0,1,0.0020725388601036
+384700001,Injection of tetanus antitoxin (procedure),NO EFFECT,,0,
+120646007,Antibody screen (procedure),NO EFFECT,,0,
+394701000,Asthma follow-up (regime/therapy),NO EFFECT,,0,
+449868002,Smokes tobacco daily (finding),NO EFFECT,,0,
+88039007,Transplant of lung (procedure),IMPROVE SLOWLY FROM 2 MONTH TO 6 MONTH,2.0,1,0.0082644628099173
+113076002,Glucose tolerance test (procedure),NO EFFECT,,0,
+283371005,Laceration of forearm (disorder),NO EFFECT,,0,
+239960007,Impingement syndrome of shoulder region (disorder),IMPROVE MODERATELY FROM 2 MONTH TO 6 MONTH,3.0,1,0.0025706940874035
+14734007,Administrative procedure,NO EFFECT,,0,
+370247008,Facial laceration (disorder),NO EFFECT,,0,
+7199000,Tuberous sclerosis syndrome (disorder),PERMANENT,3.0,5,0.0046082949308755
+433114000,Human epidermal growth factor receptor 2 gene detection by immunohistochemistry (procedure),NO EFFECT,,0,
+239960007,Impingement syndrome of shoulder region (disorder),IMPROVE MODERATELY FROM 8 DAY TO 2 MONTH,3.0,5,0.0016181229773462
+37931006,Auscultation (procedure),NO EFFECT,,0,
+193683001,Color blindness (disorder),PERMANENT,3.0,1,0.0011520737327188
+262574004,Bullet wound (disorder),NO EFFECT,,0,
+443936004,Oligodendroglioma (disorder),PERMANENT,3.0,1,0.0011520737327188
+109989006,Multiple myeloma (disorder),PERMANENT,3.0,1,0.0057603686635944
+225337009,Suicide risk assessment (procedure),NO EFFECT,,0,
+68254000,Removal of intrauterine device (procedure),NO EFFECT,,0,
+14152002,Intravenous infusion (procedure),NO EFFECT,,0,
+81000006,Pediculosis capitis (disorder),IMPROVE FAST FROM 1 DAY TO 1 WEEK,2.0,2,0.0036231884057971
+313204009,Lifestyle education (procedure),NO EFFECT,,0,
+269828009,Syphilis infectious titer test (procedure),NO EFFECT,,0,
+169553002,Insertion of subcutaneous contraceptive (procedure),NO EFFECT,,0,
+371883000,Outpatient procedure (procedure),NO EFFECT,,0,
+247803002,Seasonal affective disorder (disorder),IMPROVE MODERATELY FROM 2 MONTH TO 6 MONTH,2.0,2,0.0025706940874035
+183801001,Inpatient stay 3 days (finding),NO EFFECT,,0,
+66999008,Hyperparathyroidism (disorder),IMPROVE SLOWLY FROM 1 YEAR TO MORE YEAR,2.0,2,0.0037593984962406
+60442001,Perforation of tympanic membrane (disorder),IMPROVE MODERATELY FROM 8 DAY TO 2 MONTH,3.0,2,0.0048543689320388
+57378007,Urine protein test,NO EFFECT,,0,
+363680008,Radiographic imaging procedure (procedure),IMPROVE FAST FROM 5 MINUTE TO 1 DAY,3.0,5,0.0010362694300518
+58150001,Fracture of clavicle (disorder),IMPROVE FAST FROM 1 DAY TO 1 WEEK,3.0,3,0.0036231884057971
+239960007,Impingement syndrome of shoulder region (disorder),IMPROVE FAST FROM 5 MINUTE TO 1 DAY,3.0,5,0.0010362694300518
+312681000,Bone density scan (procedure),NO EFFECT,,0,
+54550000,Electroencephalogram (procedure),IMPROVE FAST FROM 5 MINUTE TO 1 DAY,3.0,5,0.005181347150259
+230558006,Hereditary liability to pressure palsies (disorder),DECLINE SLOWLY FROM 1 YEAR TO MORE YEAR,3.0,2,0.003690036900369
+428251008,History of appendectomy (situation),NO EFFECT,,0,
+108311000,"Psychiatric procedure, interview AND/OR consultation (procedure)",NO EFFECT,,0,
+82078001,Collection of blood specimen for laboratory (procedure),NO EFFECT,,0,
+387685009,Surgical manipulation of shoulder joint (procedure),NO EFFECT,,0,
+443529005,Detection of chromosomal aneuploidy in prenatal amniotic fluid specimen using fluorescence in situ hybridization screening technique (procedure),NO EFFECT,,0,
+767263007,22q11.2 deletion syndrome (disorder),PERMANENT,3.0,5,0.0011520737327188
+74036000,Pregnancy detection examination (procedure),NO EFFECT,,0,
+385691007,Fracture care (regime/therapy),NO EFFECT,,0,
+47693006,Rupture of appendix (disorder),NO EFFECT,,0,
+58150001,Fracture of clavicle (disorder),IMPROVE FAST FROM 5 MINUTE TO 1 DAY,3.0,5,0.0020725388601036
+430193006,Medication Reconciliation (procedure),NO EFFECT,,0,
+180207008,Intravenous blood transfusion of packed cells (procedure),NO EFFECT,,0,
+168172001,Sweat test (procedure),NO EFFECT,,0,
+418398002,Ultrasound scan of upper abdomen (procedure),NO EFFECT,,0,
+169762003,Postnatal visit (regime/therapy),NO EFFECT,,0,
+225419007,Surveillance (regime/therapy),NO EFFECT,,0,
+703040004,Agreeing on diabetes care plan (procedure),NO EFFECT,,0,
+271442007,Fetal anatomy study (procedure),NO EFFECT,,0,
+406162001,Asthma management (regime/therapy),NO EFFECT,,0,
+38804009,Turner syndrome (disorder),PERMANENT,3.0,1,0.0034562211981566
+58150001,Fracture of clavicle (disorder),IMPROVE SLOWLY FROM 2 MONTH TO 6 MONTH,3.0,1,0.0082644628099173
+276339004,Environment (environment),NO EFFECT,,0,
+109989006,Multiple myeloma (disorder),IMPROVE FAST FROM 5 MINUTE TO 1 DAY,3.0,1,0.0031088082901554

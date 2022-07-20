@@ -8,7 +8,9 @@ from eka.dt_mngmnt import DtMngmnt
 import functools
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for)
-from werkzeug.security import check_password_hash, generate_password_hash
+# from werkzeug.security import check_password_hash, generate_password_hash
+# from eka import create_app
+# # application = create_app()
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -71,7 +73,7 @@ def login():
             else:
                 session['admin'] = False
 
-            return redirect(url_for('index'))
+            return redirect(url_for('evaluation.index'))
         
         flash(error)
 
@@ -92,7 +94,7 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('evaluation.index'))
 
 
 def login_required(view):
